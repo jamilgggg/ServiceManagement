@@ -1,6 +1,6 @@
 <x-layout>
     <!-- Ticketing System Table -->
-    <div class="overflow-x-auto p-6">
+    <div class="overflow-x-auto p-3">
         <div class="min-w-full bg-white shadow rounded-lg overflow-hidden">
             <table class="min-w-full table-auto border-collapse">
                 <thead class="border-b-2 border-b-black">
@@ -78,11 +78,15 @@
                                     <span class="text-xs text-gray-400">Not yet acknowledged</span>
                                 @endif
                             </td>
-                            <td>
-                                <button class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
+
+                            <td class="pr-3">
+                                <button class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center">
                                     Action
-                                  </button>
+                                    <i class="fas fa-caret-down ml-2 text-xs"></i> <!-- Small caret down icon -->
+                                </button>
                             </td>
+
+
                         </tr>
                     @endforeach
                 </tbody>
