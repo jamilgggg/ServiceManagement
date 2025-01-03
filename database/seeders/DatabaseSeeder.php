@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         ]);
         
         Status::factory(27)->create();
-        Ticket::factory(20)->create();
-        Machine::factory(20)->create();
+        Ticket::factory(100)->create();
+        Machine::factory(100)->create();
     }
 }
