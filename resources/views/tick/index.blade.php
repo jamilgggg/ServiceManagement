@@ -91,6 +91,14 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{-- <div class="px-6 py-4">
+                {{ $tickets->links() }}
+            </div> --}}
+
+            <div class="px-6 py-4">
+                {{ $tickets->links('pagination::tailwind') }}
+            </div>
         </div>
     </div>
 </x-layout>
