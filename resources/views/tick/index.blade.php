@@ -79,12 +79,59 @@
                                 @endif
                             </td>
 
-                            <td class="pr-3">
-                                <button class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center">
-                                    Action
-                                    <i class="fas fa-caret-down ml-2 text-xs"></i> <!-- Small caret down icon -->
-                                </button>
+                            {{-- action button --}}
+                            <td class="pr-3" x-data="{ open: false }">
+                                <div class="relative inline-block text-left" x-on:click.away="open = false">
+                                    <button 
+                                        @click="open = true"
+                                        class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center"
+                                    >
+                                        Action
+                                        <i class="fas fa-caret-down ml-2 text-xs"></i> <!-- Small caret down icon -->
+                                    </button>
+
+                                    <!-- Dropdown Menu -->
+                                    <div 
+                                        x-show="open" 
+                                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+                                        x-cloak
+                                    >
+                                        <ul class="text-sm">
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-sync-alt mr-2"></i> <!-- UPDATE REQUEST -->
+                                                UPDATE REQUEST
+                                            </li>
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-wrench mr-2"></i> <!-- PARTS REQUEST LOGS -->
+                                                PARTS REQUEST LOGS
+                                            </li>
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-info-circle mr-2"></i> <!-- STATUS LOGS -->
+                                                STATUS LOGS
+                                            </li>
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-file-alt mr-2"></i> <!-- PAGE COUNT LOGS -->
+                                                PAGE COUNT LOGS
+                                            </li>
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-history mr-2"></i> <!-- PM HISTORY -->
+                                                PM HISTORY
+                                            </li>
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-cogs mr-2"></i> <!-- SERVICE HISTORY -->
+                                                SERVICE HISTORY
+                                            </li>
+                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-comments mr-2"></i> <!-- DIRECT CHAT -->
+                                                DIRECT CHAT
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
                             </td>
+
+
 
 
                         </tr>
