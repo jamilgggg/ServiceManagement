@@ -3,91 +3,84 @@
     <div class="overflow-x-auto p-3">
         <div class="min-w-full bg-white shadow rounded-lg overflow-hidden">
             <table class="min-w-full table-auto border-collapse">
-                <thead class="border-b-2 border-b-black">
+                <thead class="border-b-2 border-b-black bg-gray-50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Ticket Number</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Status</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Priority Level</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Company</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Department</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Brand-Model</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Serial Number</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase">Acknowledged By</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold uppercase"></th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Ticket Number</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Priority</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Company</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Technician</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Aging</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Last Updated</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white-50">
                     @foreach($tickets as $ticket)
                         <tr class="hover:bg-gray-100 transition duration-150">
                             <!-- Ticket Number -->
-                            <td class="px-6 py-4 text-sm font-semibold text-black-700">
+                            <td class="px-4 py-3 text-sm font-semibold text-black-700">
                                 {{ $ticket->ticket_number }}
                             </td>
 
                             <!-- Status -->
-                            <td class="px-6 py-4 text-sm">
-                                @if($ticket->status_color == 1)
-                                    <span class="px-3 py-1 rounded-full bg-green-100 text-green-600">{{ $ticket->status_name }}</span>
-                                @elseif($ticket->status_color == 2)
-                                    <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-600">{{ $ticket->status_name }}</span>
-                                @else
-                                    <span class="px-3 py-1 rounded-full bg-red-100 text-red-600">{{ $ticket->status_name }}</span>
-                                @endif
+                            <td class="px-4 py-3 text-sm">
+                                <span class="px-3 py-1 rounded-full 
+                                    {{ $ticket->status_color == 1 ? 'bg-green-100 text-green-600' : ($ticket->status_color == 2 ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
+                                    {{ $ticket->status_name }}
+                                </span>
                             </td>
 
                             <!-- Priority Level -->
-                            <td class="px-6 py-4 text-sm font-medium">
-                                @if($ticket->priority == 1)
-                                    <span class="px-3 py-1 rounded-full bg-green-100 text-green-600">LOW</span>
-                                @elseif($ticket->priority == 2)
-                                    <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-600">MEDIUM</span>
-                                @else
-                                    <span class="px-3 py-1 rounded-full bg-red-100 text-red-600">HIGH</span>
-                                @endif
+                            <td class="px-4 py-3 text-sm font-medium">
+                                <span class="px-3 py-1 rounded-full 
+                                    {{ $ticket->priority == 1 ? 'bg-green-100 text-green-600' : ($ticket->priority == 2 ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
+                                    {{ $ticket->priority == 1 ? 'LOW' : ($ticket->priority == 2 ? 'MEDIUM' : 'HIGH') }}
+                                </span>
                             </td>
 
                             <!-- Company -->
-                            <td class="px-6 py-4 text-sm text-black-600">
+                            <td class="px-4 py-3 text-sm text-black-600">
                                 {{ $ticket->company }}
                             </td>
 
-                            <!-- Department -->
-                            <td class="px-6 py-4 text-sm text-black-600">
-                                {{ $ticket->department }}
-                            </td>
-
-                            <!-- Brand-Model -->
-                            <td class="px-6 py-4 text-sm text-black-600">
-                                {{ $ticket->brand }} - {{ $ticket->model }}
-                            </td>
-
-                            <!-- Serial Number -->
-                            <td class="px-6 py-4 text-sm text-black-600">
-                                {{ $ticket->serial_number }}
-                            </td>
-
-                            <!-- Acknowledged By -->
-                            <td class="px-6 py-4 text-sm text-black-600">
-                                @if($ticket->acknowledgedby)
-                                    {{ $ticket->acknowledgedby }}
-                                    <br>
-                                    <span class="text-xs text-black-500">
-                                        {{ \Carbon\Carbon::parse($ticket->acknowledgedby_datetime)->format('d M, Y') }}
-                                    </span>
+                            <!-- Technician Assigned -->
+                            <td class="px-4 py-3 text-sm text-black-600">
+                                @if($ticket->technician)
+                                    {{ $ticket->technician }}
                                 @else
-                                    <span class="text-xs text-gray-400">Not yet acknowledged</span>
+                                    <span class="text-xs text-gray-400">Unassigned</span>
                                 @endif
                             </td>
 
-                            {{-- action button --}}
-                            <td class="pr-3" x-data="{ open: false }">
-                                <div class="relative inline-block text-left" x-on:click.away="open = false">
+                            <!-- Aging -->
+                            <td class="px-4 py-3 text-center">
+                                <div class="rounded-full bg-orange-500 text-white font-bold w-5 h-5 flex items-center justify-center mx-auto">
+                                    {{ $ticket->aging }}
+                                </div>
+                            </td>
+
+                            <!-- Last Updated -->
+                            <td class="px-4 py-3 text-sm text-center">
+                                <div class="flex items-center space-x-2 justify-center">
+                                    <span class="bg-gray-100 px-3 py-1 rounded-md text-xs font-medium flex items-center">
+                                        <i class="fa fa-calendar text-green-600 mr-1"></i> {{ \Carbon\Carbon::parse($ticket->updated_at)->format('d M, Y') }}
+                                    </span>
+                                    <span class="bg-gray-100 px-3 py-1 rounded-md text-xs font-medium flex items-center">
+                                        <i class="fa fa-clock text-blue-600 mr-1"></i> {{ \Carbon\Carbon::parse($ticket->updated_at)->format('h:i A') }}
+                                    </span>
+                                </div>
+                            </td>
+
+                            <!-- Action Button -->
+                            <td class="px-4 py-3 text-center">
+                                <div class="relative inline-block text-left" x-data="{ open: false }">
                                     <button 
-                                        @click="open = true"
+                                        @click="open = !open"
                                         class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center"
                                     >
                                         Action
-                                        <i class="fas fa-caret-down ml-2 text-xs"></i> <!-- Small caret down icon -->
+                                        <i class="fas fa-caret-down ml-2 text-xs"></i>
                                     </button>
 
                                     <!-- Dropdown Menu -->
@@ -97,53 +90,37 @@
                                         x-cloak
                                     >
                                         <ul class="text-sm">
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-sync-alt mr-2"></i> <!-- UPDATE REQUEST -->
-                                                UPDATE REQUEST
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-sync-alt mr-2"></i> UPDATE REQUEST
                                             </li>
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-wrench mr-2"></i> <!-- PARTS REQUEST LOGS -->
-                                                PARTS REQUEST LOGS
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-wrench mr-2"></i> PARTS REQUEST LOGS
                                             </li>
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-info-circle mr-2"></i> <!-- STATUS LOGS -->
-                                                STATUS LOGS
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-info-circle mr-2"></i> STATUS LOGS
                                             </li>
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-file-alt mr-2"></i> <!-- PAGE COUNT LOGS -->
-                                                PAGE COUNT LOGS
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-file-alt mr-2"></i> PAGE COUNT LOGS
                                             </li>
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-history mr-2"></i> <!-- PM HISTORY -->
-                                                PM HISTORY
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-history mr-2"></i> PM HISTORY
                                             </li>
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-cogs mr-2"></i> <!-- SERVICE HISTORY -->
-                                                SERVICE HISTORY
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-cogs mr-2"></i> SERVICE HISTORY
                                             </li>
-                                            <li class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
-                                                <i class="fa fa-comments mr-2"></i> <!-- DIRECT CHAT -->
-                                                DIRECT CHAT
+                                            <li class="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left flex items-center"> 
+                                                <i class="fa fa-comments mr-2"></i> DIRECT CHAT
                                             </li>
                                         </ul>
-
                                     </div>
                                 </div>
                             </td>
-
-
-
-
                         </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            {{-- <div class="px-6 py-4">
-                {{ $tickets->links() }}
-            </div> --}}
-
-            <div class="px-6 py-4">
+            <div class="px-4 py-3">
                 {{ $tickets->links('pagination::tailwind') }}
             </div>
         </div>
