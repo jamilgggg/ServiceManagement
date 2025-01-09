@@ -7,4 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     use HasFactory;
+
+    protected $appends = ['aging'];
+
+    public function getAgingAttribute()
+    {
+        $createdAt = new \DateTime($this->created_at);
+        $now = new \DateTime();
+        return $now->diff($createdAt)->days;
+    }
 }
