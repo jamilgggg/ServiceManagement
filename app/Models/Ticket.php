@@ -10,6 +10,8 @@ class Ticket extends Model
 
     protected $appends = ['aging'];
 
+    protected $table = 'sp_ticket';
+
     public function getAgingAttribute()
     {
         $createdAt = new \DateTime($this->created_at);

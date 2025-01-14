@@ -55,7 +55,7 @@
 
                             <!-- Aging -->
                             <td class="px-4 py-3 text-center">
-                                <div class="rounded-full bg-orange-500 text-white font-bold w-5 h-5 flex items-center justify-center mx-auto">
+                                <div class="rounded-full bg-orange-500 text-white font-bold w-7 h-7 flex items-center justify-center mx-auto">
                                     {{ $ticket->aging }}
                                 </div>
                             </td>
@@ -86,6 +86,7 @@
                                     <!-- Dropdown Menu -->
                                     <div 
                                         x-show="open" 
+                                        @click.away="open = false" 
                                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
                                         x-cloak
                                     >
@@ -115,6 +116,7 @@
                                     </div>
                                 </div>
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>

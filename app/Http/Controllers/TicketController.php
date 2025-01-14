@@ -15,7 +15,7 @@ class TicketController extends Controller
     {
         $tickets = Ticket::query()
             ->select('t.*', 's.name as status_name', 's.color as status_color', 'm.serial_number', 'm.company', 'm.department', 'm.brand', 'm.model')
-            ->from('tickets as t')
+            ->from('sp_ticket as t')
             ->leftJoin('sp_status as s', 't.status', '=', 's.id')
             ->leftJoin('machines as m', 't.fk_mif', '=', 'm.id')
             ->orderBy('t.created_at', 'desc')

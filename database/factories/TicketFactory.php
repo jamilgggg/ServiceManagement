@@ -21,7 +21,6 @@ class TicketFactory extends Factory
             'priority' => fake()->numberBetween(1, 3),
             'ticket_number' => fake()->unique()->bothify('MAN-HD-#######'),
             'type' => 1,
-            'work_done' => fake()->numberBetween(1, 10),
             'reported_by' => fake()->numberBetween(1, 10),
             'acknowledged_by' => fake()->numberBetween(1, 20),
             'acknowledgedby_datetime' => fake()->dateTimeBetween('-1 year', 'now'),
