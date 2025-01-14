@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('sp_ticket', function (Blueprint $table) {
             $table->id();
             $table->integer('status');
             $table->integer('priority');
             $table->string('ticket_number');
             $table->integer('type');
-            $table->integer('work_done');
             $table->integer('reported_by');
             $table->integer('acknowledged_by');
             $table->dateTime('acknowledgedby_datetime');
@@ -35,6 +34,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('sp_ticket');
         Schema::dropIfExists('tickets');
     }
 };
