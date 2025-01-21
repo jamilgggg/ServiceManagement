@@ -1,4 +1,48 @@
 <x-layout>
+
+
+{{-- Contains button --}}
+<div x-data="{ open: false }" class="fixed top-4 right-4 z-50" @click.away="open = false">
+    <!-- Parent (Plus) Button -->
+    <button 
+        @click="open = !open" 
+        class="bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none transform transition-all duration-300 ease-in-out flex items-center justify-center"
+    >
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <!-- Child buttons (will show/hidden based on the 'open' state) -->
+    <div x-show="open" x-transition class="absolute mt-4 right-0 space-y-3">
+        <!-- Create Request button -->
+        <button 
+            @click="open = false"
+            class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
+        >
+            <i class="fas fa-plus-circle text-xl"></i>
+            <span class="text-sm">Create Request</span>
+        </button>
+
+        <!-- Search button -->
+        <button 
+            @click="open = false"
+            class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
+        >
+            <i class="fas fa-search text-xl"></i>
+            <span class="text-sm">Search</span>
+        </button>
+
+        <!-- Export to Excel button -->
+        <button 
+            @click="open = false"
+            class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
+        >
+            <i class="fas fa-file-excel text-xl"></i>
+            <span class="text-sm">Export to Excel</span>
+        </button>
+    </div>
+</div>
+
+
     <!-- Ticketing System Table -->
     <div class="overflow-x-auto p-3">
         <div class="min-w-full bg-white shadow rounded-lg overflow-hidden">
@@ -12,7 +56,7 @@
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Technician</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Aging</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Last Updated</th>
-                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Actions</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white-50">
