@@ -1,47 +1,152 @@
 <x-layout>
 
+    <div x-data="{ open: false, createModal: false }">
+            <div class="fixed top-4 right-4 z-50" @click.away="open = false">
+                <button 
+                        @click="open = !open" 
+                        class="bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none transform transition-all duration-300 ease-in-out flex items-center justify-center"
+                    >
+                        <i class="fas fa-plus text-xl"></i>
+                </button>
+                <div x-show="open" x-transition class="absolute mt-4 right-0 space-y-3">
+                    <!-- Create Request button -->
+                    <button 
+                        @click="createModal = true,open = false"
+                        class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
+                    >
+                        <i class="fas fa-plus-circle text-xl"></i>
+                        <span class="text-sm">Create Request</span>
+                    </button>
 
-{{-- Contains button --}}
-<div x-data="{ open: false }" class="fixed top-4 right-4 z-50" @click.away="open = false">
-    <!-- Parent (Plus) Button -->
-    <button 
-        @click="open = !open" 
-        class="bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none transform transition-all duration-300 ease-in-out flex items-center justify-center"
-    >
-        <i class="fas fa-plus text-xl"></i>
-    </button>
+                    <!-- Search button -->
+                    <button 
+                        @click="open = false"
+                        class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
+                    >
+                        <i class="fas fa-search text-xl"></i>
+                        <span class="text-sm">Search</span>
+                    </button>
 
-    <!-- Child buttons (will show/hidden based on the 'open' state) -->
-    <div x-show="open" x-transition class="absolute mt-4 right-0 space-y-3">
-        <!-- Create Request button -->
-        <button 
-            @click="open = false"
-            class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
-        >
-            <i class="fas fa-plus-circle text-xl"></i>
-            <span class="text-sm">Create Request</span>
-        </button>
+                    <!-- Export to Excel button -->
+                    <button 
+                        @click="open = false"
+                        class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
+                    >
+                        <i class="fas fa-file-excel text-xl"></i>
+                        <span class="text-sm">Export to Excel</span>
+                    </button>
+                </div>
+            </div>
 
-        <!-- Search button -->
-        <button 
-            @click="open = false"
-            class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
-        >
-            <i class="fas fa-search text-xl"></i>
-            <span class="text-sm">Search</span>
-        </button>
+            <!-- Modal -->
+            <div x-show="createModal" @click.away="createModal = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white p-6 rounded-lg w-full max-w-4xl h-[80vh] overflow-y-auto" @click.stop>
+                    <!-- Modal Header -->
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 class="text-xl font-semibold">Create Request</h2>
+                        <button @click="createModal = false" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
 
-        <!-- Export to Excel button -->
-        <button 
-            @click="open = false"
-            class="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-600 focus:outline-none transform transition-all duration-200 ease-in-out flex items-center space-x-3 w-56 border border-gray-600"
-        >
-            <i class="fas fa-file-excel text-xl"></i>
-            <span class="text-sm">Export to Excel</span>
-        </button>
+                    <!-- Tab Navigation -->
+                    <div x-data="{ tab: 'basic' }">
+                        <div class="flex mb-4 border-b">
+                            <button @click="tab = 'basic'" :class="{'border-b-2 border-blue-500 text-blue-500': tab === 'basic'}" class="px-4 py-2 text-sm text-gray-700 hover:text-blue-500">
+                                Basic Information
+                            </button>
+                            <button @click="tab = 'printer'" :class="{'border-b-2 border-blue-500 text-blue-500': tab === 'printer'}" class="px-4 py-2 text-sm text-gray-700 hover:text-blue-500">
+                                Printer Details
+                            </button>
+                        </div>
+
+                        <!-- Form -->
+                        <form>
+                            <!-- Basic Information Tab -->
+                            <div x-show="tab === 'basic'">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="dueDate" class="block text-sm font-medium text-gray-700">Due Date</label>
+                                        <input type="date" id="dueDate" class="mt-1 p-2 w-full border rounded-md">
+                                    </div>
+                                    <div>
+                                        <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                                        <input type="text" id="type" class="mt-1 p-2 w-full border rounded-md" placeholder="Type">
+                                    </div>
+                                    <div>
+                                        <label for="ownership" class="block text-sm font-medium text-gray-700">Ownership</label>
+                                        <select id="ownership" class="mt-1 p-2 w-full border rounded-md">
+                                            <option>---</option>
+                                            <option>Option 1</option>
+                                            <option>Option 2</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="request" class="block text-sm font-medium text-gray-700">Request</label>
+                                        <select id="request" class="mt-1 p-2 w-full border rounded-md">
+                                            <option>---</option>
+                                            <option>Option 1</option>
+                                            <option>Option 2</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="requestorName" class="block text-sm font-medium text-gray-700">Requestor's Name</label>
+                                        <input type="text" id="requestorName" class="mt-1 p-2 w-full border rounded-md" placeholder="Requestor's Name">
+                                    </div>
+                                    <div>
+                                        <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact Number</label>
+                                        <input type="text" id="contactNumber" class="mt-1 p-2 w-full border rounded-md" placeholder="Contact Number">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Printer Details Tab -->
+                            <div x-show="tab === 'printer'">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="serialNumber" class="block text-sm font-medium text-gray-700">Serial Number</label>
+                                        <input type="text" id="serialNumber" class="mt-1 p-2 w-full border rounded-md" placeholder="Serial Number">
+                                    </div>
+                                    <div>
+                                        <label for="company" class="block text-sm font-medium text-gray-700">Company</label>
+                                        <input type="text" id="company" class="mt-1 p-2 w-full border rounded-md" placeholder="Company">
+                                    </div>
+                                    <div>
+                                        <label for="department" class="block text-sm font-medium text-gray-700">Department</label>
+                                        <textarea id="department" class="mt-1 p-2 w-full border rounded-md" placeholder="Department"></textarea>
+                                    </div>
+                                    <div>
+                                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                                        <textarea id="address" class="mt-1 p-2 w-full border rounded-md" placeholder="Address"></textarea>
+                                    </div>
+                                    <div>
+                                        <label for="printerBrand" class="block text-sm font-medium text-gray-700">Printer Brand</label>
+                                        <input type="text" id="printerBrand" class="mt-1 p-2 w-full border rounded-md" placeholder="Printer Brand">
+                                    </div>
+                                    <div>
+                                        <label for="printerModel" class="block text-sm font-medium text-gray-700">Printer Model</label>
+                                        <input type="text" id="printerModel" class="mt-1 p-2 w-full border rounded-md" placeholder="Printer Model">
+                                    </div>
+                                    <div>
+                                        <label for="pageCount" class="block text-sm font-medium text-gray-700">Page Count</label>
+                                        <input type="text" id="pageCount" class="mt-1 p-2 w-full border rounded-md" placeholder="Page Count">
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex justify-between items-center mt-4">
+                                    <button @click="createModal = false" type="button" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                                        Close
+                                    </button>
+                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
     </div>
-</div>
-
 
     <!-- Ticketing System Table -->
     <div class="overflow-x-auto p-3">
