@@ -1,5 +1,6 @@
 <x-layout>
 
+    {{-- PLUS MODAL --}}
     <div x-data="{ open: false, createModal: false }">
             <div class="fixed top-4 right-4 z-50" @click.away="open = false">
                 <button 
@@ -69,22 +70,28 @@
                                     </div>
                                     <div>
                                         <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                                        <input type="text" id="type" class="mt-1 p-2 w-full border rounded-md" placeholder="Type">
+                                        <select id="type" class="mt-1 p-2 w-full border rounded-md">
+                                            <option>---</option>
+                                            <option value="1">PRINTER</option>
+                                            <option value="2">TONER</option>
+                                            <option value="3">LAPTOP</option>
+                                        </select>
                                     </div>
                                     <div>
                                         <label for="ownership" class="block text-sm font-medium text-gray-700">Ownership</label>
                                         <select id="ownership" class="mt-1 p-2 w-full border rounded-md">
                                             <option>---</option>
-                                            <option>Option 1</option>
-                                            <option>Option 2</option>
+                                            <option value="1">DELSAN OWNED</option>
+                                            <option value="2">OTHERS</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label for="request" class="block text-sm font-medium text-gray-700">Request</label>
                                         <select id="request" class="mt-1 p-2 w-full border rounded-md">
                                             <option>---</option>
-                                            <option>Option 1</option>
-                                            <option>Option 2</option>
+                                            <option value="1">CHAT</option>
+                                            <option value="2">TELEPHONE</option>
+                                            <option value="3">EMAIL</option>
                                         </select>
                                     </div>
                                     <div>
@@ -100,35 +107,48 @@
 
                             <!-- Printer Details Tab -->
                             <div x-show="tab === 'printer'">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="serialNumber" class="block text-sm font-medium text-gray-700">Serial Number</label>
-                                        <input type="text" id="serialNumber" class="mt-1 p-2 w-full border rounded-md" placeholder="Serial Number">
-                                    </div>
-                                    <div>
-                                        <label for="company" class="block text-sm font-medium text-gray-700">Company</label>
-                                        <input type="text" id="company" class="mt-1 p-2 w-full border rounded-md" placeholder="Company">
-                                    </div>
-                                    <div>
-                                        <label for="department" class="block text-sm font-medium text-gray-700">Department</label>
-                                        <textarea id="department" class="mt-1 p-2 w-full border rounded-md" placeholder="Department"></textarea>
-                                    </div>
-                                    <div>
-                                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                                        <textarea id="address" class="mt-1 p-2 w-full border rounded-md" placeholder="Address"></textarea>
-                                    </div>
-                                    <div>
-                                        <label for="printerBrand" class="block text-sm font-medium text-gray-700">Printer Brand</label>
-                                        <input type="text" id="printerBrand" class="mt-1 p-2 w-full border rounded-md" placeholder="Printer Brand">
-                                    </div>
-                                    <div>
-                                        <label for="printerModel" class="block text-sm font-medium text-gray-700">Printer Model</label>
-                                        <input type="text" id="printerModel" class="mt-1 p-2 w-full border rounded-md" placeholder="Printer Model">
-                                    </div>
-                                    <div>
-                                        <label for="pageCount" class="block text-sm font-medium text-gray-700">Page Count</label>
-                                        <input type="text" id="pageCount" class="mt-1 p-2 w-full border rounded-md" placeholder="Page Count">
-                                    </div>
+                                <div x-data="searchMachines()" x-init="initSearch()">
+                                        <div class="relative">
+                                            <label for="serialNumber" class="block text-sm font-medium text-gray-700">Serial Number</label>
+                                            <input type="text" id="serialNumber" x-model="searchQuery"
+                                                @input.debounce.300ms="fetchMachines"
+                                                @focus="showDropdown = true"
+                                                @blur="setTimeout(() => showDropdown = false, 200)"
+                                                class="mt-1 p-2 w-full border rounded-md" placeholder="Serial Number">
+
+                                            <!-- Dropdown Suggestions -->
+                                            <ul x-show="showDropdown && results.length" class="absolute w-full bg-white border rounded-md shadow-md z-10">
+                                                <template x-for="machine in results" :key="machine.id">
+                                                    <li @click="selectMachine(machine)"
+                                                        class="p-2 cursor-pointer hover:bg-gray-200">
+                                                        <span x-text="machine.serial_number"></span>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-4 mt-2">
+                                            <div>
+                                                <label for="company" class="block text-sm font-medium text-gray-700">Company</label>
+                                                <input type="text" id="company" x-model="selectedMachine.company"
+                                                    class="mt-1 p-2 w-full border rounded-md" placeholder="Company">
+                                            </div>
+                                            <div>
+                                                <label for="department" class="block text-sm font-medium text-gray-700">Department</label>
+                                                <textarea id="department" x-model="selectedMachine.department"
+                                                        class="mt-1 p-2 w-full border rounded-md" placeholder="Department"></textarea>
+                                            </div>
+                                            <div>
+                                                <label for="printerBrand" class="block text-sm font-medium text-gray-700">Printer Brand</label>
+                                                <input type="text" id="printerBrand" x-model="selectedMachine.brand"
+                                                    class="mt-1 p-2 w-full border rounded-md" placeholder="Printer Brand">
+                                            </div>
+                                            <div>
+                                                <label for="printerModel" class="block text-sm font-medium text-gray-700">Printer Model</label>
+                                                <input type="text" id="printerModel" x-model="selectedMachine.model"
+                                                    class="mt-1 p-2 w-full border rounded-md" placeholder="Printer Model">
+                                            </div>
+                                        </div>
                                 </div>
 
                                 <!-- Action Buttons -->
@@ -141,6 +161,7 @@
                                     </button>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -276,4 +297,43 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function searchMachines() {
+            return {
+                searchQuery: '',
+                results: [],
+                showDropdown: false,
+                selectedMachine: { company: '', department: '', brand: '', model: '' },
+
+                async fetchMachines() {
+                    if (this.searchQuery.length < 2) {
+                        this.results = [];
+                        return;
+                    }
+
+                    const response = await fetch(`/tick/machines/search?q=${this.searchQuery}`);
+                    this.results = await response.json();
+                },
+
+                selectMachine(machine) {
+                    this.searchQuery = machine.serial_number;
+                    this.selectedMachine = {
+                        company: machine.company,
+                        department: machine.department,
+                        brand: machine.brand,
+                        model: machine.model
+                    };
+                    this.showDropdown = false;
+                },
+
+                initSearch() {
+                    this.results = [];
+                    this.selectedMachine = { company: '', department: '', brand: '', model: '' };
+                }
+            };
+        }
+    </script>
+
+    
 </x-layout>
