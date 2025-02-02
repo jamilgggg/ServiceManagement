@@ -24,6 +24,23 @@ class TicketController extends Controller
         return view('tick.index', ['tickets' => $tickets]);
     }
 
+    public function searchMachines(Request $request)
+    {
+        $search = $request->query('q');
+
+        if (!$search) {
+            return response()->json([]);
+        }
+
+        $machines = \DB::table('machines')
+            ->where('serial_number', 'LIKE', "%{$search}%")
+            ->limit(5)
+            ->get(['id', 'serial_number', 'company', 'department', 'brand', 'model']);
+
+        return response()->json($machines);
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
