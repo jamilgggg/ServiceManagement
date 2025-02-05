@@ -18,6 +18,10 @@ class TicketFactory extends Factory
     {
         return [
             'status' => fake()->numberBetween(1, 10),
+            'dueDate'=> now(),
+            'ownership' => 1,
+            'request' => 1,
+            'requestorName' => fake()->name,
             'priority' => fake()->numberBetween(1, 3),
             'ticket_number' => fake()->unique()->bothify('MAN-HD-#######'),
             'type' => 1,

@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('sp_ticket', function (Blueprint $table) {
             $table->id();
             $table->integer('status');
+            $table->dateTime('dueDate');
+            $table->integer('ownership');
+            $table->integer('request');
+            $table->string('requestorName');
             $table->integer('priority');
             $table->string('ticket_number');
             $table->integer('type');
