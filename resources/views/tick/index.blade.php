@@ -39,24 +39,27 @@
                 </div>
             </div>
 
+    
             <!-- Modal -->
-            <div x-show="createModal" @click.away="createModal = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <form action="{{ route('tick.store') }}" method="POST">
+            @csrf
+                <div x-show="createModal" @click.away="createModal = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                 <div class="bg-white p-6 rounded-lg w-full max-w-4xl h-[80vh] overflow-y-auto" @click.stop>
                     <!-- Modal Header -->
                     <div class="flex justify-between items-center mb-4 border-b pb-2">
                         <h2 class="text-xl font-semibold">Create Request</h2>
-                        <button @click="createModal = false" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                        <button @click.prevent="createModal = false" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
                     </div>
 
                     <!-- Tab Navigation -->
                     <div x-data="{ tab: 'basic' }">
                         <div class="flex mb-4 border-b">
-                            <button @click="tab = 'basic'" :class="{'border-b-2 border-blue-500 text-blue-500': tab === 'basic'}" class="px-4 py-2 text-sm text-gray-700 hover:text-blue-500">
+                            <a @click.prevent="tab = 'basic'" :class="{'border-b-2 border-blue-500 text-blue-500': tab === 'basic'}" class="px-4 py-2 text-sm text-gray-700 hover:text-blue-500 cursor-pointer">
                                 Basic Information
-                            </button>
-                            <button @click="tab = 'printer'" :class="{'border-b-2 border-blue-500 text-blue-500': tab === 'printer'}" class="px-4 py-2 text-sm text-gray-700 hover:text-blue-500">
+                            </a>
+                            <a @click.prevent="tab = 'printer'" :class="{'border-b-2 border-blue-500 text-blue-500': tab === 'printer'}" class="px-4 py-2 text-sm text-gray-700 hover:text-blue-500 cursor-pointer">
                                 Printer Details
-                            </button>
+                            </a>
                         </div>
 
                         <!-- Form -->
@@ -66,11 +69,11 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label for="dueDate" class="block text-sm font-medium text-gray-700">Due Date</label>
-                                        <input type="date" id="dueDate" class="mt-1 p-2 w-full border rounded-md">
+                                        <input type="date" name = 'dueDate' id="dueDate" class="mt-1 p-2 w-full border rounded-md">
                                     </div>
                                     <div>
                                         <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                                        <select id="type" class="mt-1 p-2 w-full border rounded-md">
+                                        <select id="type" name = 'type' class="mt-1 p-2 w-full border rounded-md">
                                             <option>---</option>
                                             <option value="1">PRINTER</option>
                                             <option value="2">TONER</option>
@@ -79,7 +82,7 @@
                                     </div>
                                     <div>
                                         <label for="ownership" class="block text-sm font-medium text-gray-700">Ownership</label>
-                                        <select id="ownership" class="mt-1 p-2 w-full border rounded-md">
+                                        <select id="ownership" name="ownership" class="mt-1 p-2 w-full border rounded-md">
                                             <option>---</option>
                                             <option value="1">DELSAN OWNED</option>
                                             <option value="2">OTHERS</option>
@@ -87,7 +90,7 @@
                                     </div>
                                     <div>
                                         <label for="request" class="block text-sm font-medium text-gray-700">Request</label>
-                                        <select id="request" class="mt-1 p-2 w-full border rounded-md">
+                                        <select id="request" name="request"  class="mt-1 p-2 w-full border rounded-md">
                                             <option>---</option>
                                             <option value="1">CHAT</option>
                                             <option value="2">TELEPHONE</option>
@@ -96,11 +99,11 @@
                                     </div>
                                     <div>
                                         <label for="requestorName" class="block text-sm font-medium text-gray-700">Requestor's Name</label>
-                                        <input type="text" id="requestorName" class="mt-1 p-2 w-full border rounded-md" placeholder="Requestor's Name">
+                                        <input type="text" id="requestorName" name= "requestorName" class="mt-1 p-2 w-full border rounded-md" placeholder="Requestor's Name">
                                     </div>
                                     <div>
                                         <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact Number</label>
-                                        <input type="text" id="contactNumber" class="mt-1 p-2 w-full border rounded-md" placeholder="Contact Number">
+                                        <input type="text" id="client_contactnum" name= "client_contactnum" class="mt-1 p-2 w-full border rounded-md" placeholder="Contact Number">
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +168,9 @@
                         </form>
                     </div>
                 </div>
-            </div>
+                </div>
+            </form>
+            
 
     </div>
 

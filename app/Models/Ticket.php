@@ -12,6 +12,8 @@ class Ticket extends Model
 
     protected $table = 'sp_ticket';
 
+    protected $fillable = ['dueDate', /* other fields */];
+
     public function getAgingAttribute()
     {
         $createdAt = new \DateTime($this->created_at);
