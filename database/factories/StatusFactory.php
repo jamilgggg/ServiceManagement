@@ -16,7 +16,7 @@ class StatusFactory extends Factory
      */
     public function definition(): array
     {
-        // Predefined list of status names
+        // Predefined list of status names (retained in order)
         $statusNames = [
             'OPEN',
             'FOR PARTS REPLACEMENT',
@@ -47,8 +47,15 @@ class StatusFactory extends Factory
             'METER READING DONE'
         ];
 
-        $statusName = fake()->randomElement($statusNames);
+        // Use an index or loop to iterate over the status names sequentially
+        static $index = 0;
+        $statusName = $statusNames[$index % count($statusNames)]; // Ensure it loops over the array
+
+        // Randomize the color
         $color = fake()->numberBetween(1, 3);
+
+        // Increment the index for the next call
+        $index++;
 
         return [
             'name' => $statusName,
@@ -56,3 +63,5 @@ class StatusFactory extends Factory
         ];
     }
 }
+
+
