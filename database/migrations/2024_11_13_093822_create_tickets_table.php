@@ -15,19 +15,19 @@ return new class extends Migration
             $table->id();
             $table->integer('status');
             $table->dateTime('dueDate');
-            $table->integer('ownership');
-            $table->integer('request');
+            $table->integer('ownership')->default(1);
+            $table->integer('request')->default(1);
             $table->string('requestorName');
-            $table->integer('priority');
-            $table->string('ticket_number');
-            $table->integer('type');
-            $table->integer('reported_by');
-            $table->integer('acknowledged_by');
-            $table->dateTime('acknowledgedby_datetime');
-            $table->integer('technician_by');
+            $table->integer('priority')->default(1);
+            $table->string('ticket_number')->nullable();
+            $table->integer('type')->nullable();
+            $table->integer('reported_by')->nullable();
+            $table->integer('acknowledged_by')->nullable();
+            $table->dateTime('acknowledgedby_datetime')->nullable();
+            $table->integer('technician_by')->nullable();
             $table->string('client_contactnum');
-            $table->string('client_email');
-            $table->integer('fk_mif');
+            $table->string('client_email')->nullable();//no frontend
+            $table->integer('fk_mif')->nullable();
             $table->timestamps();
         });
         

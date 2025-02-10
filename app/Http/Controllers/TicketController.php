@@ -56,10 +56,15 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'dueDate' => ['required', 'date']
+            'dueDate' => ['required', 'date'],
+            'ownership' => ['required', 'integer'],
+            'type' => ['required', 'integer'],
+            'request' => ['required', 'integer'],
+            'requestorName' => ['required', 'string'],
+            'client_contactnum' => ['required', 'string'],
         ]);
 
-        // $data['user_id'] = $request->user()->id;
+        $data['status'] = 1;
         $note = Ticket::create($data);
     }
 
