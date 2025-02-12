@@ -62,6 +62,7 @@ class TicketController extends Controller
             'request' => ['required', 'integer'],
             'requestorName' => ['required', 'string'],
             'client_contactnum' => ['required', 'string'],
+            'client_email' => ['required', 'string'],
         ]);
 
         $data['status'] = 1;

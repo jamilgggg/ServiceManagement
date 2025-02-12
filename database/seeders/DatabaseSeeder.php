@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Machine;
 use App\Models\Status;
+use App\Models\Branch;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -28,5 +29,6 @@ class DatabaseSeeder extends Seeder
         Status::factory(27)->create();
         Ticket::factory(5)->create();
         Machine::factory(5)->create();
+        Branch::factory(5)->create();
     }
 }

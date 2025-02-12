@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('client_contactnum');
             $table->string('client_email')->nullable();//no frontend
             $table->integer('fk_mif')->nullable();
+            $table->integer('fk_branch')->nullable();
             $table->timestamps();
         });
         
