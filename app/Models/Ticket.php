@@ -18,7 +18,8 @@ class Ticket extends Model
     'requestorName',
     'client_contactnum',
     'status',
-    'type'];
+    'type',
+    'client_email'];
 
     public function getAgingAttribute()
     {

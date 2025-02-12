@@ -105,6 +105,10 @@
                                         <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact Number</label>
                                         <input type="text" id="client_contactnum" name= "client_contactnum" class="mt-1 p-2 w-full border rounded-md" placeholder="Contact Number">
                                     </div>
+                                    <div>
+                                        <label for="contactNumber" class="block text-sm font-medium text-gray-700">Client Email</label>
+                                        <input type="email" id="client_email" name= "client_email" class="mt-1 p-2 w-full border rounded-md" placeholder="Client Email">
+                                    </div>
                                 </div>
                             </div>
 
