@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\Branch;
+use App\Models\AccountType;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -55,6 +57,9 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        $brTest = 1;
+        $accTest = 4;
+
         $data = $request->validate([
             'dueDate' => ['required', 'date'],
             'ownership' => ['required', 'integer'],
@@ -65,7 +70,21 @@ class TicketController extends Controller
             'client_email' => ['required', 'string'],
         ]);
 
+        $branch = Branch::find($brTest);
+        $acttype = AccountType::find($accTest);
+
+        $latestTicket = Ticket::where('fk_branch', $brTest)
+        ->latest('id')
+        ->first();
+
+        $sequenceNumber = $latestTicket ? (int) substr($latestTicket->ticket_number, -4) + 1 : 1;
+        $ticketNumber = strtoupper(substr($branch->branch, 0, 3)) . '-' . 
+        strtoupper($acttype->alias) . '-' . str_pad($sequenceNumber, 7, '0', STR_PAD_LEFT);
+
+        // Add ticket_number and status to the data
+        $data['ticket_number'] = $ticketNumber;
         $data['status'] = 1;
+
         $note = Ticket::create($data);
     }
 

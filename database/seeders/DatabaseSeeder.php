@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\Machine;
 use App\Models\Status;
 use App\Models\Branch;
+use App\Models\AccountType;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -30,5 +31,6 @@ class DatabaseSeeder extends Seeder
         Ticket::factory(5)->create();
         Machine::factory(5)->create();
         Branch::factory(5)->create();
+        AccountType::factory(5)->create();
     }
 }
