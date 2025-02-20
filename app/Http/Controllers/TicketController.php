@@ -81,11 +81,13 @@ class TicketController extends Controller
         $ticketNumber = strtoupper(substr($branch->branch, 0, 3)) . '-' . 
         strtoupper($acttype->alias) . '-' . str_pad($sequenceNumber, 7, '0', STR_PAD_LEFT);
 
-        // Add ticket_number and status to the data
         $data['ticket_number'] = $ticketNumber;
+        $data['fk_branch'] = $brTest;
         $data['status'] = 1;
 
-        $note = Ticket::create($data);
+        Ticket::create($data);
+
+        return redirect()->back()->with('success', 'Ticket created successfully!');
     }
 
     /**

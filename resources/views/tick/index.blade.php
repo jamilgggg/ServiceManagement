@@ -307,6 +307,21 @@
         </div>
     </div>
 
+    {{-- Success MODAL --}}
+    @if(session('success'))
+        {{-- Success MODAL --}}
+        <div x-data="{ showSuccessModal: true }">
+            <div x-show="showSuccessModal" x-transition class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold text-green-600">Success</h2>
+                    <p>{{ session('success') }}</p>
+                    <button @click="showSuccessModal = false" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">OK</button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     <script>
         function searchMachines() {
             return {
