@@ -13,7 +13,7 @@ class Ticket extends Model
     protected $table = 'sp_ticket';
 
     protected $fillable = ['dueDate', 'ownership', 'request','requestorName','client_contactnum','status','type','client_email',
-    'ticket_number'];
+    'ticket_number','fk_branch'];
 
     public function getAgingAttribute()
     {
