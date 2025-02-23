@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         
         Status::factory(27)->create();
         Ticket::factory(5)->create();
-        Machine::factory(5)->create();
+        Machine::factory(100)->create();
         Branch::factory(5)->create();
         AccountType::factory(5)->create();
     }

@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\Branch;
 use App\Models\AccountType;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TicketController extends Controller
 {
@@ -55,40 +56,51 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $brTest = 1;
-        $accTest = 4;
+    public function store(Request $request){
+        try{
+            $branchId = 1; 
+            $accountTypeId = 4;
 
-        $data = $request->validate([
-            'dueDate' => ['required', 'date'],
-            'ownership' => ['required', 'integer'],
-            'type' => ['required', 'integer'],
-            'request' => ['required', 'integer'],
-            'requestorName' => ['required', 'string'],
-            'client_contactnum' => ['required', 'string'],
-            'client_email' => ['required', 'string'],
-        ]);
+            $data = $request->validate([
+                'dueDate' => 'required|date',
+                'ownership' => 'required|integer',
+                'type' => 'required|integer',
+                'request' => 'required|integer',
+                'requestorName' => 'required|string',
+                'client_contactnum' => 'required|string',
+                'client_email' => 'required|string',
+                'machine_id' => 'required|exists:machines,id',
+            ]);
 
-        $branch = Branch::find($brTest);
-        $acttype = AccountType::find($accTest);
+            $branch = Branch::findOrFail($branchId);
+            $accountType = AccountType::findOrFail($accountTypeId);
 
-        $latestTicket = Ticket::where('fk_branch', $brTest)
-        ->latest('id')
-        ->first();
+            $latestTicket = Ticket::where('fk_branch', $branchId)
+                                ->latest('id')
+                                ->first();
 
-        $sequenceNumber = $latestTicket ? (int) substr($latestTicket->ticket_number, -4) + 1 : 1;
-        $ticketNumber = strtoupper(substr($branch->branch, 0, 3)) . '-' . 
-        strtoupper($acttype->alias) . '-' . str_pad($sequenceNumber, 7, '0', STR_PAD_LEFT);
+            $sequenceNumber = $latestTicket ? (int) substr($latestTicket->ticket_number, -4) + 1 : 1;
 
-        $data['ticket_number'] = $ticketNumber;
-        $data['fk_branch'] = $brTest;
-        $data['status'] = 1;
+            $ticketNumber = strtoupper(substr($branch->branch, 0, 3)) . '-' . 
+                            strtoupper($accountType->alias) . '-' . 
+                            str_pad($sequenceNumber, 7, '0', STR_PAD_LEFT);
 
-        Ticket::create($data);
+            $ticketData = array_merge($data, [
+                'ticket_number' => $ticketNumber,
+                'fk_branch' => $branchId,
+                'status' => 1,
+                'fk_mif' => $data['machine_id'],
+            ]);
 
-        return redirect()->back()->with('success', 'Ticket created successfully!');
+            Ticket::create($ticketData);
+
+            return redirect()->back()->with('success', 'Ticket created successfully!');
+        }catch (ModelNotFoundException $e) {
+            return redirect()->back()->with('error', 'Branch or Account Type not found.');
+        }
+        
     }
+
 
     /**
      * Display the specified resource.

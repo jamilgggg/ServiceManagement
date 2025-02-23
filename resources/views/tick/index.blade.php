@@ -40,7 +40,7 @@
             </div>
 
     
-            <!-- Modal -->
+            <!-- Create Modal -->
             <form action="{{ route('tick.store') }}" method="POST">
             @csrf
                 <div x-show="createModal" @click.away="createModal = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -116,8 +116,9 @@
                             <div x-show="tab === 'printer'">
                                 <div x-data="searchMachines()" x-init="initSearch()">
                                         <div class="relative">
+                                            <input type="hidden" name="machine_id" x-model="selectedMachine.id">
                                             <label for="serialNumber" class="block text-sm font-medium text-gray-700">Serial Number</label>
-                                            <input type="text" id="serialNumber" x-model="searchQuery"
+                                            <input type="text" name ="serialNumber" id="serialNumber" x-model="searchQuery"
                                                 @input.debounce.300ms="fetchMachines"
                                                 @focus="showDropdown = true"
                                                 @blur="setTimeout(() => showDropdown = false, 200)"
@@ -309,11 +310,10 @@
 
     {{-- Success MODAL --}}
     @if(session('success'))
-        {{-- Success MODAL --}}
         <div x-data="{ showSuccessModal: true }">
             <div x-show="showSuccessModal" x-transition class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
                 <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 class="text-xl font-bold text-green-600">Success</h2>
+                    <h2 class="text-xl font-bold text-green-600">Success!</h2>
                     <p>{{ session('success') }}</p>
                     <button @click="showSuccessModal = false" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">OK</button>
                 </div>
@@ -322,13 +322,28 @@
     @endif
 
 
+    {{-- Error MODAL --}}
+     @if(session('error'))
+     <div x-data="{ showErrorModal: true }">
+         <div x-show="showErrorModal" x-transition class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+             <div class="bg-white p-6 rounded-lg shadow-lg">
+                 <h2 class="text-xl font-bold text-red-600">Error!</h2>
+                 <p>{{ session('error') }}</p>
+                 <button @click="showErrorModal = false" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">OK</button>
+             </div>
+         </div>
+     </div>
+     @endif
+
+
+
     <script>
         function searchMachines() {
             return {
                 searchQuery: '',
                 results: [],
                 showDropdown: false,
-                selectedMachine: { company: '', department: '', brand: '', model: '' },
+                selectedMachine: { id:'', company: '', department: '', brand: '', model: '' },
 
                 async fetchMachines() {
                     if (this.searchQuery.length < 2) {
@@ -343,6 +358,7 @@
                 selectMachine(machine) {
                     this.searchQuery = machine.serial_number;
                     this.selectedMachine = {
+                        id: machine.id,
                         company: machine.company,
                         department: machine.department,
                         brand: machine.brand,
