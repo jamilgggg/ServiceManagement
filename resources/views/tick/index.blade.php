@@ -1,4 +1,4 @@
-<x-layout>
+<x-app-layout>
 
     {{-- PLUS MODAL --}}
     <div x-data="{ open: false, createModal: false }">
@@ -376,4 +376,4 @@
     </script>
 
     
-</x-layout>
+</x-app-layout>
