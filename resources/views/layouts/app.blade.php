@@ -21,7 +21,7 @@
             <!-- Sidebar -->
             <aside x-show="sidebarOpen" x-transition
                 class="bg-gray-800 w-60 p-4 text-white space-y-2 hidden lg:block">
-                <a href="#" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700">
+                <a href="{{ route('dashboard') }}" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700">
                     <i class="fas fa-home mr-2"></i> Home
                 </a>
                 <a href="#" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700">

@@ -2,12 +2,12 @@
 
     {{-- PLUS MODAL --}}
     <div x-data="{ open: false, createModal: false }">
-            <div class="fixed top-4 right-4 z-50" @click.away="open = false">
+            <div class="fixed top-12 right-8 z-50" @click.away="open = false">
                 <button 
                         @click="open = !open" 
                         class="bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none transform transition-all duration-300 ease-in-out flex items-center justify-center"
                     >
-                        <i class="fas fa-plus text-xl"></i>
+                        <i class="fas fa-plus text-lg"></i>
                 </button>
                 <div x-show="open" x-transition class="absolute mt-4 right-0 space-y-3">
                     <!-- Create Request button -->
