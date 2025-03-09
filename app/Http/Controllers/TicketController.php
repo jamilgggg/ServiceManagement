@@ -22,7 +22,7 @@ class TicketController extends Controller
             ->leftJoin('sp_status as s', 't.status', '=', 's.id')
             ->leftJoin('machines as m', 't.fk_mif', '=', 'm.id')
             ->orderBy('t.created_at', 'desc')
-            ->paginate(15);
+            ->paginate(10);
 
         return view('tick.index', ['tickets' => $tickets]);
     }
