@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('sp_account', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('idacctype');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -42,7 +43,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sp_account');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

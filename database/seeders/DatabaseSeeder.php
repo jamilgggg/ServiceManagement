@@ -22,9 +22,18 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'id' => 1,
-            'name' => 'Test User',
-            'email' => 'helpdesk@hd.com',
-            'password' => bcrypt('123123123'),
+            'idacctype' => 1,
+            'name' => 'System Admin',
+            'email' => 'sysadmin@d.com',
+            'password' => bcrypt('1234'),
+        ]);
+
+        User::factory()->create([
+            'id' => 2,
+            'idacctype' => 2,
+            'name' => 'Helpdesk One',
+            'email' => 'helpdesk@d.com',
+            'password' => bcrypt('1234'),
         ]);
         
         Status::factory(27)->create();
