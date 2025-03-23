@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
     public function index()
     {
         $accounts = User::query()
-            ->select('a.name', 'b.type', 'a.email')
+            ->select('a.name', 'b.type', 'a.email','a.idstat')
             ->from('sp_account as a')
             ->leftJoin('sp_accounttype as b', 'a.idacctype', '=', 'b.id')
             ->orderBy('a.name', 'asc')
