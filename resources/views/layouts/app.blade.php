@@ -19,7 +19,7 @@
         <div class="min-h-screen flex">
             
             <!-- Sidebar -->
-            @include('layouts.sideNavHd')
+            @include('layouts.sideNavAdmin')
 
             <!-- Main content area -->
             <div class="flex-1 flex flex-col">
