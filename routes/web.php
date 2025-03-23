@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/','tick')->name('dashboard');
 
 Route::middleware(['auth','verified'])->group(function(){
     Route::resource('tick', TicketController::class);
+    Route::get('/accounts', [RegisteredUserController::class, 'index'])->name('accounts.index');
     Route::get('/tick/machines/search', [TicketController::class, 'searchMachines'])->name('machines.search');
 });
 

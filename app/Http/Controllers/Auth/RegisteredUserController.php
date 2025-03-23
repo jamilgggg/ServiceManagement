@@ -27,6 +27,21 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+    public function index()
+    {
+        $accounts = User::query()
+            ->select('a.name', 'b.type', 'a.email')
+            ->from('sp_account as a')
+            ->leftJoin('sp_accounttype as b', 'a.idacctype', '=', 'b.id')
+            ->orderBy('a.name', 'asc')
+            ->paginate(10);
+
+            $startRow = ($accounts->currentPage() - 1) * $accounts->perPage() + 1;
+
+
+        return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow]);
+    }
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
