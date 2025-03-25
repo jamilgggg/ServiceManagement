@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
                 'idacctype' => 3,
                 'idstat' => 2,
                 'name' => 'The Technician',
-                'email' => 'fieldtechk@d.com',
+                'email' => 'fieldtech@d.com',
                 'password' => bcrypt('1234'),
             ],
         ];

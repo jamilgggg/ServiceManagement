@@ -39,7 +39,7 @@
                                 {{-- {{ $account->email }} --}}
                             </td>
 
-                            <td class="px-4 py-3 text-sm text-black-600">
+                            <td class="px-4 py-3 text-sm font-medium">
                                 <span class="px-3 py-1 rounded-full 
                                     {{ $account->idstat == 1 ? 'bg-green-100 text-green-600' :  'bg-red-100 text-red-600' }}">
                                     {{ $account->idstat == 1 ? 'ACTIVE' : 'INACTIVE'}}
