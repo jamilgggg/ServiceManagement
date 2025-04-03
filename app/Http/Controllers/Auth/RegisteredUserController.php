@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\AccountType;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,9 +39,11 @@ class RegisteredUserController extends Controller
             ->paginate(10);
 
             $startRow = ($accounts->currentPage() - 1) * $accounts->perPage() + 1;
+            $accountTypes = AccountType::all();
 
 
-        return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow]);
+
+        return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow,'accountTypes' => $accountTypes]);
     }
     public function store(Request $request): RedirectResponse
     {
