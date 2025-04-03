@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('idacctype');
             $table->integer('idstat');
+            $table->string('location');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
