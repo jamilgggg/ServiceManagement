@@ -52,6 +52,17 @@
                                         <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
                                         <input type="text" id="empid" name= "empid" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter EMP ID">
                                     </div>
+
+                                    <!-- Branch Multi-Select -->
+                                    <div>
+                                        <label for="branches" class="block text-sm font-medium text-gray-700">Branch</label>
+                                        <select id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" multiple>
+                                            @foreach($branches as $branch)
+                                                <option value="{{ $branch->id }}">{{ $branch->branch }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div>
                                         <label for="uname" class="block text-sm font-medium text-gray-700">User Full Name</label>
                                         <input type="text" id="uname" name= "uname" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name">
@@ -90,10 +101,7 @@
                                             <option value="2">INACTIVE</option>
                                         </select>
                                     </div>
-                                    <div>
-                                        <label for="branch" class="block text-sm font-medium text-gray-700">Branch</label>
-                                        <input type="text" id="branch" name= "branch" class="mt-1 p-2 w-full border rounded-md">
-                                    </div>
+                                    
                                 </div>
                                   <!-- Action Buttons -->
                                 <div class="flex justify-between items-center mt-4">
@@ -182,5 +190,15 @@
         </div>
 
     </div>
+
+<script>
+    $(document).ready(function() {
+        $('#branches').select2({
+            placeholder: "Select Branches",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
 
 </x-app-layout>

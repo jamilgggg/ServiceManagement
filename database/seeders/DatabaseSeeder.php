@@ -8,13 +8,11 @@ use App\Models\Machine;
 use App\Models\Status;
 use App\Models\Branch;
 use App\Models\AccountType;
+use App\Models\AccountBranch;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $users = [
@@ -42,12 +40,32 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        // Create users
+        $usersBranches = [
+            [
+                'id' => 1,
+                'account_id' => 1,
+                'branch_id' => 1,
+            ],
+            [
+                'id' => 2,
+                'account_id' => 2,
+                'branch_id' => 1,
+            ],
+            [
+                'id' => 3,
+                'account_id' => 3,
+                'branch_id' => 1,
+            ],
+        ];
+
         foreach ($users as $user) {
             User::factory()->create($user);
         }
 
-        // Seed other models
+        foreach ($usersBranches as $usersBranch) {
+            AccountBranch::create($usersBranch);
+        }
+    
         Status::factory(27)->create();
         Ticket::factory(5)->create();
         Machine::factory(100)->create();

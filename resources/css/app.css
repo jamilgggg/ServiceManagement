@@ -5,3 +5,16 @@
 .border{
     border-color: #e5e7eb;
 }
+
+.select2-selection__choice {
+    background-color: #48bb78 !important;
+    color: white !important;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+.select2-selection__choice__remove {
+    color: white !important;
+}
+
+
