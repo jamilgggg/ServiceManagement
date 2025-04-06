@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\AccountType;
+use App\Models\Branch;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,10 +41,12 @@ class RegisteredUserController extends Controller
 
             $startRow = ($accounts->currentPage() - 1) * $accounts->perPage() + 1;
             $accountTypes = AccountType::all();
+            $branches = Branch::all();
 
 
 
-        return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow,'accountTypes' => $accountTypes]);
+        return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow,
+        'accountTypes' => $accountTypes, 'branches' => $branches]);
     }
     public function store(Request $request): RedirectResponse
     {
