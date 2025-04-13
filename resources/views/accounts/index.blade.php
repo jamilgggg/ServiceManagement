@@ -14,7 +14,7 @@
             </button>
 
             <!-- Create Modal -->
-            <form action="{{ route('tick.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('accounts.addAccounts') }}" method="POST" enctype="multipart/form-data">
             @csrf
                 <div x-show="createModal" @click.away="createModal = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                 <div class="bg-white p-6 rounded-lg w-full max-w-4xl h-[80vh] overflow-y-auto" @click.stop>
@@ -52,7 +52,48 @@
                                         <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
                                         <input type="text" id="empid" name= "empid" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter EMP ID">
                                     </div>
-
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700">User Full Name</label>
+                                        <input type="text" id="name" name= "name" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                        <input type="email" id="email" name= "email" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Email Address">
+                                    </div>
+                                    <div>
+                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                        <input type="password" id="password" name= "password" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Password">
+                                    </div>
+                                    <div>
+                                        <label for="user_contactnum" class="block text-sm font-medium text-gray-700">Contact Number</label>
+                                        <input type="text" id="user_contactnum" name= "user_contactnum" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Contact Number">
+                                    </div>
+                                    <div>
+                                        <label for="idgender" class="block text-sm font-medium text-gray-700">Gender</label>
+                                        <select id="idgender" name="idgender" class="mt-1 p-2 w-full border rounded-md">
+                                            <option>---</option>
+                                            <option value="1">MALE</option>
+                                            <option value="2">FEMALE</option>
+                                            <option value="3">LGBTQ+</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="idacctype" class="block text-sm font-medium text-gray-700">Account Role</label>
+                                        <select id="idacctype" name="idacctype" class="mt-1 p-2 w-full border rounded-md">
+                                        <option>---</option>
+                                        @foreach($accountTypes as $accountType)
+                                            <option value="{{$accountType->id}}">{{$accountType->type}}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="idemailstat" class="block text-sm font-medium text-gray-700">Email Status</label>
+                                        <select id="idemailstat" name="idemailstat" class="mt-1 p-2 w-full border rounded-md">
+                                            <option>---</option>
+                                            <option value="1">ACTIVE</option>
+                                            <option value="2">INACTIVE</option>
+                                        </select>
+                                    </div>
                                     <!-- Branch Multi-Select -->
                                     <div>
                                         <label for="branches" class="block text-sm font-medium text-gray-700">Branch</label>
@@ -62,47 +103,8 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-                                    <div>
-                                        <label for="uname" class="block text-sm font-medium text-gray-700">User Full Name</label>
-                                        <input type="text" id="uname" name= "uname" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name">
-                                    </div>
-                                    <div>
-                                        <label for="user_email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                                        <input type="email" id="user_email" name= "user_email" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Email Address">
-                                    </div>
-                                    <div>
-                                        <label for="user_contactnum" class="block text-sm font-medium text-gray-700">Contact Number</label>
-                                        <input type="text" id="user_contactnum" name= "user_contactnum" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Contact Number">
-                                    </div>
-                                    <div>
-                                        <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
-                                        <select id="gender" name="gender" class="mt-1 p-2 w-full border rounded-md">
-                                            <option>---</option>
-                                            <option value="1">MALE</option>
-                                            <option value="2">FEMALE</option>
-                                            <option value="3">LGBTQ+</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="acc_type" class="block text-sm font-medium text-gray-700">Account Role</label>
-                                        <select id="acc_type" name="acc_type" class="mt-1 p-2 w-full border rounded-md">
-                                        <option>---</option>
-                                        @foreach($accountTypes as $accountType)
-                                            <option value="{{$accountType->id}}">{{$accountType->type}}</option>
-                                        @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="email_stat" class="block text-sm font-medium text-gray-700">Email Status</label>
-                                        <select id="email_stat" name="email_stat" class="mt-1 p-2 w-full border rounded-md">
-                                            <option>---</option>
-                                            <option value="1">ACTIVE</option>
-                                            <option value="2">INACTIVE</option>
-                                        </select>
-                                    </div>
-                                    
                                 </div>
+
                                   <!-- Action Buttons -->
                                 <div class="flex justify-between items-center mt-4">
                                     <button @click="createModal = false" type="button" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\AccountType;
 use App\Models\Branch;
+use App\Models\AccountBranch;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -67,5 +68,40 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    public function addAccounts(Request $request){
+        $request->validate([
+            'empid' => ['required', 'string', 'max:7'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required'],
+            'user_contactnum' => ['required', 'string', 'max:255'],
+            'idgender' => ['required'],
+            'idacctype' => ['required'],
+            'idemailstat' => ['required'],
+        ]);
+
+        $user = User::create([
+            'empid' => $request->empid,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'user_contactnum' => $request->user_contactnum,
+            'idgender' => $request->idgender,
+            'idacctype' => $request->idacctype,
+            'idemailstat' => $request->idemailstat,
+        ]);
+
+        $selectedBranches = $request->input('branches');
+        $userId = User::latest('id')
+        ->first();
+
+        foreach ($selectedBranches as $branchId) {
+            AccountBranch::create([
+                'account_id' => $userId->id,
+                'branch_id' => $branchId,
+            ]);
+        }
     }
 }

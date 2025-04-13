@@ -9,5 +9,7 @@ class AccountBranch extends Model
 {
     use HasFactory;
     protected $table = 'sp_account_branch';
+
+    protected $fillable = ['account_id','branch_id'];
     public $timestamps = true;
 }
