@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('sp_account', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->integer('idacctype');
-            $table->integer('idstat');
-            $table->string('location');
+            $table->integer('idstat')->default(1);
+            $table->integer('idemailstat');
+            $table->integer('idgender');
+            $table->string('empid');
+            $table->string('name');
+            $table->string('user_contactnum');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
