@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 class RegisteredUserController extends Controller
 {
@@ -71,37 +74,54 @@ class RegisteredUserController extends Controller
     }
 
     public function addAccounts(Request $request){
-        $request->validate([
-            'empid' => ['required', 'string', 'max:7'],
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required'],
-            'user_contactnum' => ['required', 'string', 'max:255'],
-            'idgender' => ['required'],
-            'idacctype' => ['required'],
-            'idemailstat' => ['required'],
-        ]);
-
-        $user = User::create([
-            'empid' => $request->empid,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'user_contactnum' => $request->user_contactnum,
-            'idgender' => $request->idgender,
-            'idacctype' => $request->idacctype,
-            'idemailstat' => $request->idemailstat,
-        ]);
-
-        $selectedBranches = $request->input('branches');
-        $userId = User::latest('id')
-        ->first();
-
-        foreach ($selectedBranches as $branchId) {
-            AccountBranch::create([
-                'account_id' => $userId->id,
-                'branch_id' => $branchId,
+        try{
+            $request->validate([
+                'empid' => ['required', 'string', 'regex:/^\d+$/','max:5'],
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required','string','min:8','regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/'],//alphanumeric
+                'user_contactnum' => ['required', 'string', 'max:50'],
+                'idgender' => ['required'],
+                'idacctype' => ['required'],
+                'idemailstat' => ['required'],
+                'branches' => ['required'],
             ]);
+    
+            $user = User::create([
+                'empid' => $request->empid,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'user_contactnum' => $request->user_contactnum,
+                'idgender' => $request->idgender,
+                'idacctype' => $request->idacctype,
+                'idemailstat' => $request->idemailstat,
+                'email_verified_at' => Carbon::now(),
+                'remember_token' => Str::random(10),
+            ]);
+    
+            $selectedBranches = $request->input('branches');
+            $userId = $user->id;
+    
+            if ($selectedBranches) {
+                foreach ($selectedBranches as $branchId) {
+                    AccountBranch::create([
+                        'account_id' => $userId,
+                        'branch_id' => $branchId,
+                    ]);
+                }
+            }
+    
+            return redirect()->back()->with('success', 'Account Added Succesfully');
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Account Creation Error: ' . $e->getMessage());
+            return redirect()->back()
+            ->withInput()
+            ->with('form_errors', $e->errors())
+            ->with('error', 'Validation failed. Please check the form.');
+            // return redirect()->back()->with('error', $e->getMessage())->withInput();
+            // dd($e->errors());
         }
+
     }
 }
