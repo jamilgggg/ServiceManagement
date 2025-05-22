@@ -16,6 +16,7 @@ Route::middleware(['auth','verified'])->group(function(){
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
     Route::get('/accounts', [RegisteredUserController::class, 'index'])->name('accounts.index');
     Route::post('/accounts/store', [RegisteredUserController::class, 'addAccounts'])->name('accounts.addAccounts');
+    Route::put('/accounts/update', [RegisteredUserController::class, 'updateAccounts'])->name('accounts.updateAccounts');
 });
 
 Route::middleware('auth')->group(function () {
