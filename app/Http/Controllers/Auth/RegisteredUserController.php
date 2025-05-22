@@ -118,9 +118,45 @@ class RegisteredUserController extends Controller
             return redirect()->back()
             ->withInput()
             ->with('form_errors', $e->errors())
+            ->with('mode', 'create')
             ->with('error', 'Validation failed. Please check the form.');
-            // return redirect()->back()->with('error', $e->getMessage())->withInput();
-            // dd($e->errors());
+        }
+
+    }
+
+    public function updateAccounts(Request $request){
+        try{
+            $request->validate([
+                'empid' => ['required', 'string', 'regex:/^\d+$/','max:5'],
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required','string','min:8','regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/'],//alphanumeric
+                'user_contactnum' => ['required', 'string', 'max:50'],
+                'idgender' => ['required'],
+                'idacctype' => ['required'],
+                'idemailstat' => ['required'],
+                'branches' => ['required'],
+            ]);
+    
+            $user = User::update([
+                'empid' => $request->empid,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'user_contactnum' => $request->user_contactnum,
+                'idgender' => $request->idgender,
+                'idacctype' => $request->idacctype,
+                'idemailstat' => $request->idemailstat,
+                'email_verified_at' => Carbon::now(),
+                'remember_token' => Str::random(10),
+            ]);
+            return redirect()->back()->with('success', 'Account Added Succesfully');
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Account Creation Error: ' . $e->getMessage());
+            return redirect()->back()
+            ->withInput()
+            ->with('form_errors', $e->errors())
+            ->with('error', 'Validation failed. Please check the form.');
         }
 
     }
