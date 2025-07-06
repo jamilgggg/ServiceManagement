@@ -1,19 +1,12 @@
-@props([
-    'formAction',
-])
-
 <div x-show="show"  x-cloak class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white rounded shadow-lg w-full max-w-2xl p-6 relative">
-
-            {{-- <!-- Modal Title -->
-            <h2 class="text-xl font-semibold mb-4"></h2> --}}
 
             <div class="flex justify-between items-center mb-4 border-b pb-2">
                 <h2 class="text-xl font-semibold" x-text="modalTitle"></h2>
             </div>
 
             <!-- Form -->
-            <form method="POST" action="{{ $formAction }}" enctype="multipart/form-data">
+            <form method="POST" x-bind:action="formAction" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Slot for form content -->

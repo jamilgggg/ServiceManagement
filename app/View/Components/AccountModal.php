@@ -11,13 +11,7 @@ class AccountModal extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(
-        public string $formAction,
-        public string $modalTitle = 'Create Account',
-        public string $buttonLabel = 'Add Account',
-        public string $submitLabel = 'Save',
-        public string|bool $showOnError = false,
-    ) {}
+    public function __construct() {}
     
     /**
      * Get the view / contents that represent the component.

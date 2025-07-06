@@ -20,15 +20,15 @@
     <div>
         <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
         <input type="text" id="empid" name="empid" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter EMP ID"
-            value="{{ old('empid', $account->empid ?? '') }}">
+            x-bind:value="mode === 'edit' ? accountData.empid ?? '' : '{{ old('empid') }}'">
         <x-input-error :messages="session('form_errors.empid')" class="mt-2" />
     </div>
 
     <!-- Name -->
     <div>
         <label for="name" class="block text-sm font-medium text-gray-700">User Full Name</label>
-        <input type="text" id="name" name="name" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name"
-            value="{{ old('name', $account->name ?? '') }}">
+        <input type="text" name="name" id="name" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name"
+            x-bind:value="mode === 'edit' ? accountData.name ?? '' : '{{ old('name') }}'">
         <x-input-error :messages="session('form_errors.name')" class="mt-2" />
     </div>
 
@@ -36,7 +36,7 @@
     <div>
         <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
         <input type="email" id="email" name="email" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Email Address"
-            value="{{ old('email', $account->email ?? '') }}">
+            x-bind:value="mode === 'edit' ? accountData.email ?? '' : '{{ old('email') }}'">
         <x-input-error :messages="session('form_errors.email')" class="mt-2" />
     </div>
 
@@ -58,29 +58,29 @@
     <div>
         <label for="user_contactnum" class="block text-sm font-medium text-gray-700">Contact Number</label>
         <input type="text" id="user_contactnum" name="user_contactnum" class="mt-1 p-2 w-full border rounded-md"
-            placeholder="Enter Contact Number" value="{{ old('user_contactnum', $account->user_contactnum ?? '') }}">
+            placeholder="Enter Contact Number" x-bind:value="mode === 'edit' ? accountData.user_contactnum ?? '' : '{{ old('user_contactnum') }}'">
         <x-input-error :messages="session('form_errors.user_contactnum')" class="mt-2" />
     </div>
 
     <!-- Gender -->
-    <div>
+    <div x-data="{ accountData.idgender}">
         <label for="idgender" class="block text-sm font-medium text-gray-700">Gender</label>
-        <select id="idgender" name="idgender" class="mt-1 p-2 w-full border rounded-md">
+        <select x-model="accountData.idgender" id="idgender" name="idgender" class="mt-1 p-2 w-full border rounded-md">
             <option value="">---</option>
-            <option value="1" @selected(old('idgender', $account->idgender ?? '') == '1')>MALE</option>
-            <option value="2" @selected(old('idgender', $account->idgender ?? '') == '2')>FEMALE</option>
-            <option value="3" @selected(old('idgender', $account->idgender ?? '') == '3')>LGBTQ+</option>
+            <option value="1">MALE</option>
+            <option value="2">FEMALE</option>
+            <option value="3">LGBTQ+</option>
         </select>
         <x-input-error :messages="session('form_errors.idgender')" class="mt-2" />
     </div>
 
     <!-- Account Role -->
-    <div>
+    <div x-data="{ accountData.idacctype}">
         <label for="idacctype" class="block text-sm font-medium text-gray-700">Account Role</label>
-        <select id="idacctype" name="idacctype" class="mt-1 p-2 w-full border rounded-md">
+        <select x-model="accountData.idacctype" id="idacctype" name="idacctype" class="mt-1 p-2 w-full border rounded-md">
             <option value="">---</option>
             @foreach($accountTypes as $accountType)
-                <option value="{{ $accountType->id }}" @selected(old('idacctype', $account->idacctype ?? '') == $accountType->id)>
+                <option value="{{ $accountType->id }}">
                     {{ $accountType->type }}
                 </option>
             @endforeach
@@ -89,28 +89,26 @@
     </div>
 
     <!-- Email Status -->
-    <div>
+    <div x-data="{ accountData.idemailstat}">
         <label for="idemailstat" class="block text-sm font-medium text-gray-700">Email Status</label>
-        <select id="idemailstat" name="idemailstat" class="mt-1 p-2 w-full border rounded-md">
+        <select x-model="accountData.idemailstat" id="idemailstat" name="idemailstat" class="mt-1 p-2 w-full border rounded-md">
             <option value="">---</option>
-            <option value="1" @selected(old('idemailstat', $account->idemailstat ?? '') == '1')>ACTIVE</option>
-            <option value="2" @selected(old('idemailstat', $account->idemailstat ?? '') == '2')>INACTIVE</option>
+            <option value="1">ACTIVE</option>
+            <option value="2">INACTIVE</option>
         </select>
         <x-input-error :messages="session('form_errors.idemailstat')" class="mt-2" />
     </div>
 
     <!-- Branch Multi-Select -->
-    <div>
+    <div x-data="{ accountData.branches}">
         <label for="branches" class="block text-sm font-medium text-gray-700">Branch</label>
-        <select id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" multiple>
+        <select x-model="accountData.branches" id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" multiple>
             @foreach($branches as $branch)
-                <option value="{{ $branch->id }}" 
-                    @selected(in_array($branch->id, old('branches', $account ? $account->branches->pluck('id')->toArray() : [])))>
+                <option value="{{ $branch->id }}">
                     {{ $branch->branch }}
                 </option>
             @endforeach
         </select>
         <x-input-error :messages="session('form_errors.branches')" class="mt-2" />
     </div>
-
 </div>

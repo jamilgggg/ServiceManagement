@@ -1,16 +1,15 @@
 <x-app-layout>
 
 
-<div x-data="accountModal({{ session('error') ? 'true' : 'false' }}, '{{ session('mode', '') }}')" class="overflow-x-auto p-1">
+<div 
+    x-data='accountModal({{ session("error") ? "true" : "false" }},"{{ session("mode", "") }}",{!! json_encode(old()) !!})' class="overflow-x-auto p-1">
     <button @click="openAdd()" type="button" 
         class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center ml-auto"
     >
         Add Account
         <i class="fa fa-user-plus ml-1"></i>
     </button>
-        <x-account-modal 
-            form-action="{{ route('accounts.addAccounts') }}"
-        >
+        <x-account-modal>
             @include('accounts.partials.form-fields', ['account' => null])
         </x-account-modal>
 
@@ -105,41 +104,50 @@
         });
     });
 
-    function accountModal(showOnError = false, mode = '') {
+    function accountModal(showOnError = false, mode = '', oldValues = {}) {
         return {
             show: showOnError,
             modalTitle: '',
             submitLabel: '',
             accountData: {},
             mode: mode,
+            formAction: '',
 
             init() {
                 if (this.show) {
-                    if (this.mode === 'edit') {
-                        this.modalTitle = 'Update Account';
-                        this.submitLabel = 'Update';
-                    } else {
-                        this.modalTitle = 'Create Account';
-                        this.submitLabel = 'Save';
-                    }
+                    this.setMode(this.mode);
+                }
+            },
+
+            setMode(mode) {
+                this.mode = mode;
+                if (mode === 'edit') {
+                    this.modalTitle = 'Update Account';
+                    this.submitLabel = 'Update';
+                    this.formAction = '{{ route('accounts.updateAccounts') }}';
+                } else {
+                    this.accountData = oldValues;
+                    this.modalTitle = 'Create Account';
+                    this.submitLabel = 'Save';
+                    this.formAction = '{{ route('accounts.addAccounts') }}';
                 }
             },
 
             openAdd() {
-                this.modalTitle = 'Create Account';
-                this.submitLabel = 'Save';
                 this.accountData = {};
+                this.setMode('create');
                 this.show = true;
             },
 
             openEdit(account) {
-                this.modalTitle = 'Update Account';
-                this.submitLabel = 'Update';
+                $("#branches").val(account.branches).trigger("change");
                 this.accountData = account;
+                this.setMode('edit');
                 this.show = true;
             }
         }
     }
+
 </script>
 
 </x-app-layout>
