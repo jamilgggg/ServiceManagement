@@ -17,6 +17,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
 {
@@ -37,17 +38,38 @@ class RegisteredUserController extends Controller
     public function index()
     {
         $accounts = User::query()
-            ->select('a.name', 'b.type', 'a.email','a.idstat')
+            ->select(
+   'a.id',
+            'a.empid',
+            'a.name',
+            'a.email',
+            'a.idstat',
+            'a.user_contactnum',
+            'a.idgender',
+            'a.idacctype',
+            'a.idemailstat',
+            'b.type')
             ->from('sp_account as a')
             ->leftJoin('sp_accounttype as b', 'a.idacctype', '=', 'b.id')
             ->orderBy('a.name', 'asc')
             ->paginate(10);
 
+            $accountIds = $accounts->pluck('id');
+
+            $branchMap = AccountBranch::whereIn('account_id', $accountIds)
+                ->get()
+                ->groupBy('account_id')
+                ->map(function ($branches) {
+                    return $branches->pluck('branch_id')->toArray(); // ← return array instead of string
+                });
+
+            foreach ($accounts as $account) {
+                $account->branches = $branchMap[$account->id] ?? [];
+            }
+
             $startRow = ($accounts->currentPage() - 1) * $accounts->perPage() + 1;
             $accountTypes = AccountType::all();
             $branches = Branch::all();
-
-
 
         return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow,
         'accountTypes' => $accountTypes, 'branches' => $branches]);
