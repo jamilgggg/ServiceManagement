@@ -63,7 +63,7 @@
     </div>
 
     <!-- Gender -->
-    <div x-data="{ accountData.idgender}">
+    <div>
         <label for="idgender" class="block text-sm font-medium text-gray-700">Gender</label>
         <select x-model="accountData.idgender" id="idgender" name="idgender" class="mt-1 p-2 w-full border rounded-md">
             <option value="">---</option>
@@ -75,7 +75,7 @@
     </div>
 
     <!-- Account Role -->
-    <div x-data="{ accountData.idacctype}">
+    <div>
         <label for="idacctype" class="block text-sm font-medium text-gray-700">Account Role</label>
         <select x-model="accountData.idacctype" id="idacctype" name="idacctype" class="mt-1 p-2 w-full border rounded-md">
             <option value="">---</option>
@@ -89,7 +89,7 @@
     </div>
 
     <!-- Email Status -->
-    <div x-data="{ accountData.idemailstat}">
+    <div>
         <label for="idemailstat" class="block text-sm font-medium text-gray-700">Email Status</label>
         <select x-model="accountData.idemailstat" id="idemailstat" name="idemailstat" class="mt-1 p-2 w-full border rounded-md">
             <option value="">---</option>
@@ -100,7 +100,7 @@
     </div>
 
     <!-- Branch Multi-Select -->
-    <div x-data="{ accountData.branches}">
+    <div>
         <label for="branches" class="block text-sm font-medium text-gray-700">Branch</label>
         <select x-model="accountData.branches" id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" multiple>
             @foreach($branches as $branch)
