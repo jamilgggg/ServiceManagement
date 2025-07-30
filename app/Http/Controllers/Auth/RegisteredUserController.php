@@ -22,14 +22,6 @@ use Illuminate\Support\Facades\DB;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
-     */
-    public function create(): View
-    {
-        return view('auth.register');
-    }
-
-    /**
      * Handle an incoming registration request.
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -74,26 +66,6 @@ class RegisteredUserController extends Controller
         return view('accounts.index', ['accounts' => $accounts,'startRow' => $startRow,
         'accountTypes' => $accountTypes, 'branches' => $branches]);
     }
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
-    }
 
     public function addAccounts(Request $request){
         try{
@@ -122,17 +94,7 @@ class RegisteredUserController extends Controller
                 'remember_token' => Str::random(10),
             ]);
     
-            $selectedBranches = $request->input('branches');
-            $userId = $user->id;
-    
-            if ($selectedBranches) {
-                foreach ($selectedBranches as $branchId) {
-                    AccountBranch::create([
-                        'account_id' => $userId,
-                        'branch_id' => $branchId,
-                    ]);
-                }
-            }
+           $user->branches()->attach($request->branches);
     
             return redirect()->back()->with('success', 'Account Added Succesfully');
         }catch (\Illuminate\Validation\ValidationException $e) {
@@ -146,13 +108,13 @@ class RegisteredUserController extends Controller
 
     }
 
-    public function updateAccounts(Request $request){
+    public function updateAccounts(Request $request, User $user){
         try{
             $request->validate([
                 'empid' => ['required', 'string', 'regex:/^\d+$/','max:5'],
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-                'password' => ['required','string','min:8','regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/'],//alphanumeric
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:sp_account,email,' . $user->id],
+                'password' => ['nullable', 'string', 'min:8', 'regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/'],
                 'user_contactnum' => ['required', 'string', 'max:50'],
                 'idgender' => ['required'],
                 'idacctype' => ['required'],
@@ -160,24 +122,32 @@ class RegisteredUserController extends Controller
                 'branches' => ['required'],
             ]);
     
-            $user = User::update([
+            $updateData = [
                 'empid' => $request->empid,
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
                 'user_contactnum' => $request->user_contactnum,
                 'idgender' => $request->idgender,
                 'idacctype' => $request->idacctype,
                 'idemailstat' => $request->idemailstat,
-                'email_verified_at' => Carbon::now(),
-                'remember_token' => Str::random(10),
-            ]);
-            return redirect()->back()->with('success', 'Account Added Succesfully');
+            ];
+
+            if ($request->filled('password')) {
+                $updateData['password'] = Hash::make($request->password);
+            }
+
+            $user->update($updateData);
+
+            $user->branches()->sync($request->input('branches', []));
+            
+            return redirect()->back()->with('success', 'Account Updated Succesfully');
         }catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Account Creation Error: ' . $e->getMessage());
+            Log::error('Account Update Error: ' . $e->getMessage());
             return redirect()->back()
             ->withInput()
+            ->with('mode', 'edit') 
             ->with('form_errors', $e->errors())
+            ->with('updateValues', array_merge($request->all(), ['id' => $user->id]))
             ->with('error', 'Validation failed. Please check the form.');
         }
 

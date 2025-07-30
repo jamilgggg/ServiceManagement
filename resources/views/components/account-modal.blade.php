@@ -5,14 +5,15 @@
                 <h2 class="text-xl font-semibold" x-text="modalTitle"></h2>
             </div>
 
-            <!-- Form -->
             <form method="POST" x-bind:action="formAction" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Slot for form content -->
+                <template x-if="formMethod !== 'POST'">
+                    <input type="hidden" name="_method" :value="formMethod">
+                </template>
+
                 {{ $slot }}
 
-                <!-- Action Buttons -->
                 <div class="flex justify-end space-x-2 mt-6">
                     <button type="button" @click="show = false" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
                         Close

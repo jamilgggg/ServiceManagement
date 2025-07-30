@@ -2,7 +2,9 @@
 
 
 <div 
-    x-data='accountModal({{ session("error") ? "true" : "false" }},"{{ session("mode", "") }}",{!! json_encode(old()) !!})' class="overflow-x-auto p-1">
+    x-data='accountModal(
+    {{ session("error") ? "true" : "false" }},"{{ session("mode", "") }}",{!! json_encode(old()) !!},
+    {!! json_encode(session("updateValues", [])) !!})' class="overflow-x-auto p-1">
     <button @click="openAdd()" type="button" 
         class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center ml-auto"
     >
@@ -96,6 +98,8 @@
 </div>
 
 <script>
+    window.sessionFormErrors = @json(session('form_errors', []));
+
     $(document).ready(function() {
         $('#branches').select2({
             placeholder: "Select Branches",
@@ -104,7 +108,7 @@
         });
     });
 
-    function accountModal(showOnError = false, mode = '', oldValues = {}) {
+    function accountModal(showOnError = false, mode = '', oldValues = {}, updateValues = {})  {
         return {
             show: showOnError,
             modalTitle: '',
@@ -112,8 +116,13 @@
             accountData: {},
             mode: mode,
             formAction: '',
+            formMethod: '',
+            formActionTemplate: '{{ route('accounts.updateAccounts', ['user' => '__ID__']) }}',
+            updateValues,
+            errors : {},
 
             init() {
+                this.errors = window.sessionFormErrors || {};
                 if (this.show) {
                     this.setMode(this.mode);
                 }
@@ -122,29 +131,38 @@
             setMode(mode) {
                 this.mode = mode;
                 if (mode === 'edit') {
+                    this.accountData = this.updateValues;
                     this.modalTitle = 'Update Account';
                     this.submitLabel = 'Update';
-                    this.formAction = '{{ route('accounts.updateAccounts') }}';
+                    this.formAction = this.formActionTemplate.replace('__ID__', this.accountData.id);
+                    this.formMethod = 'PUT';
                 } else {
                     this.accountData = oldValues;
                     this.modalTitle = 'Create Account';
                     this.submitLabel = 'Save';
                     this.formAction = '{{ route('accounts.addAccounts') }}';
+                    this.formMethod = 'POST';
                 }
             },
 
             openAdd() {
+                this.clearErrors();
                 this.accountData = {};
                 this.setMode('create');
                 this.show = true;
             },
 
             openEdit(account) {
+                this.clearErrors();
                 $("#branches").val(account.branches).trigger("change");
-                this.accountData = account;
+                this.updateValues = account;
                 this.setMode('edit');
                 this.show = true;
-            }
+            },
+
+            clearErrors() {
+                this.errors = {};
+            },
         }
     }
 
