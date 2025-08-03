@@ -21,7 +21,7 @@
         <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
         <input type="text" id="empid" name="empid" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter EMP ID"
             x-bind:value="mode === 'edit' ? accountData.empid ?? '' : '{{ old('empid') }}'">
-        <x-input-error :messages="session('form_errors.empid')" class="mt-2" />
+        <x-modal-error :field="'empid'" />
     </div>
 
     <!-- Name -->
@@ -29,7 +29,7 @@
         <label for="name" class="block text-sm font-medium text-gray-700">User Full Name</label>
         <input type="text" name="name" id="name" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name"
             x-bind:value="mode === 'edit' ? accountData.name ?? '' : '{{ old('name') }}'">
-        <x-input-error :messages="session('form_errors.name')" class="mt-2" />
+        <x-modal-error :field="'name'" />
     </div>
 
     <!-- Email -->
@@ -37,7 +37,7 @@
         <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
         <input type="email" id="email" name="email" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Email Address"
             x-bind:value="mode === 'edit' ? accountData.email ?? '' : '{{ old('email') }}'">
-        <x-input-error :messages="session('form_errors.email')" class="mt-2" />
+        <x-modal-error :field="'email'" />
     </div>
 
     <!-- Password -->
@@ -51,7 +51,7 @@
                 <i :class="show ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
             </button>
         </div>
-        <x-input-error :messages="session('form_errors.password')" class="mt-2" />
+        <x-modal-error :field="'password'" />
     </div>
 
     <!-- Contact Number -->
@@ -59,7 +59,7 @@
         <label for="user_contactnum" class="block text-sm font-medium text-gray-700">Contact Number</label>
         <input type="text" id="user_contactnum" name="user_contactnum" class="mt-1 p-2 w-full border rounded-md"
             placeholder="Enter Contact Number" x-bind:value="mode === 'edit' ? accountData.user_contactnum ?? '' : '{{ old('user_contactnum') }}'">
-        <x-input-error :messages="session('form_errors.user_contactnum')" class="mt-2" />
+       <x-modal-error :field="'user_contactnum'" />
     </div>
 
     <!-- Gender -->
@@ -71,7 +71,7 @@
             <option value="2">FEMALE</option>
             <option value="3">LGBTQ+</option>
         </select>
-        <x-input-error :messages="session('form_errors.idgender')" class="mt-2" />
+        <x-modal-error :field="'idgender'" />
     </div>
 
     <!-- Account Role -->
@@ -85,7 +85,7 @@
                 </option>
             @endforeach
         </select>
-        <x-input-error :messages="session('form_errors.idacctype')" class="mt-2" />
+        <x-modal-error :field="'idacctype'" />
     </div>
 
     <!-- Email Status -->
@@ -96,7 +96,7 @@
             <option value="1">ACTIVE</option>
             <option value="2">INACTIVE</option>
         </select>
-        <x-input-error :messages="session('form_errors.idemailstat')" class="mt-2" />
+        <x-modal-error :field="'idemailstat'" />
     </div>
 
     <!-- Branch Multi-Select -->
@@ -109,6 +109,6 @@
                 </option>
             @endforeach
         </select>
-        <x-input-error :messages="session('form_errors.branches')" class="mt-2" />
+        <x-modal-error :field="'branches'" />
     </div>
 </div>
