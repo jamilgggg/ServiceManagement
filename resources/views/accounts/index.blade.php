@@ -137,6 +137,7 @@
                     this.formAction = this.formActionTemplate.replace('__ID__', this.accountData.id);
                     this.formMethod = 'PUT';
                 } else {
+                    console.log(oldValues);
                     this.accountData = oldValues;
                     this.modalTitle = 'Create Account';
                     this.submitLabel = 'Save';
