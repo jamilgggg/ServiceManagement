@@ -120,6 +120,7 @@ class RegisteredUserController extends Controller
                 'idacctype' => ['required'],
                 'idemailstat' => ['required'],
                 'branches' => ['required'],
+                'idstat' => ['required'],
             ]);
     
             $updateData = [
@@ -130,6 +131,7 @@ class RegisteredUserController extends Controller
                 'idgender' => $request->idgender,
                 'idacctype' => $request->idacctype,
                 'idemailstat' => $request->idemailstat,
+                'idstat' => $request->idstat,
             ];
 
             if ($request->filled('password')) {

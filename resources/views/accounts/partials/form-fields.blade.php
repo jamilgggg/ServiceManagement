@@ -20,7 +20,7 @@
     <div>
         <label for="empid" class="block text-sm font-medium text-gray-700">Employee ID</label>
         <input type="text" id="empid" name="empid" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter EMP ID"
-            x-bind:value="mode === 'edit' ? accountData.empid ?? '' : '{{ old('empid') }}'">
+            x-model="accountData.empid">
         <x-modal-error :field="'empid'" />
     </div>
 
@@ -28,7 +28,7 @@
     <div>
         <label for="name" class="block text-sm font-medium text-gray-700">User Full Name</label>
         <input type="text" name="name" id="name" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Name"
-            x-bind:value="mode === 'edit' ? accountData.name ?? '' : '{{ old('name') }}'">
+            x-model="accountData.name">
         <x-modal-error :field="'name'" />
     </div>
 
@@ -36,7 +36,7 @@
     <div>
         <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
         <input type="email" id="email" name="email" class="mt-1 p-2 w-full border rounded-md" placeholder="Enter Email Address"
-            x-bind:value="mode === 'edit' ? accountData.email ?? '' : '{{ old('email') }}'">
+           x-model="accountData.email">
         <x-modal-error :field="'email'" />
     </div>
 
@@ -58,7 +58,7 @@
     <div>
         <label for="user_contactnum" class="block text-sm font-medium text-gray-700">Contact Number</label>
         <input type="text" id="user_contactnum" name="user_contactnum" class="mt-1 p-2 w-full border rounded-md"
-            placeholder="Enter Contact Number" x-bind:value="mode === 'edit' ? accountData.user_contactnum ?? '' : '{{ old('user_contactnum') }}'">
+            placeholder="Enter Contact Number" x-model="accountData.user_contactnum">
        <x-modal-error :field="'user_contactnum'" />
     </div>
 
@@ -102,7 +102,7 @@
     <!-- Branch Multi-Select -->
     <div>
         <label for="branches" class="block text-sm font-medium text-gray-700">Branch</label>
-        <select x-model="accountData.branches" id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" multiple>
+        <select x-model="accountData.branches" id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" :disabled="accountData.idacctype == 1" multiple>
             @foreach($branches as $branch)
                 <option value="{{ $branch->id }}">
                     {{ $branch->branch }}
@@ -111,4 +111,21 @@
         </select>
         <x-modal-error :field="'branches'" />
     </div>
+
+    <div x-show="mode == 'edit'">
+        <label for="idstat" class="block text-sm font-medium text-gray-700">Account Status</label>
+        <select x-model="accountData.idstat" id="idstat" name="idstat" class="mt-1 p-2 w-full border rounded-md">
+            <option value="">---</option>
+            <option value="1">ACTIVE</option>
+            <option value="2">INACTIVE</option>
+        </select>
+        <x-modal-error :field="'idstat'" />
+    </div>
+
+    <div x-effect="
+        if (accountData.idacctype == 1) {
+            accountData.branches = {{ json_encode($branches->pluck('id')) }};
+            $('#branches').val(accountData.branches).trigger('change');
+        }
+    "></div>
 </div>

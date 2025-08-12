@@ -28,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'user_contactnum',
         'idgender',
         'idacctype',
+        'idstat',
         'idemailstat',
         'email_verified_at',
         'remember_token',

@@ -115,6 +115,7 @@
             submitLabel: '',
             accountData: {},
             mode: mode,
+            previousMode: null, 
             formAction: '',
             formMethod: '',
             formActionTemplate: '{{ route('accounts.updateAccounts', ['user' => '__ID__']) }}',
@@ -129,6 +130,7 @@
             },
 
             setMode(mode) {
+                this.previousMode = this.mode; 
                 this.mode = mode;
                 if (mode === 'edit') {
                     this.accountData = this.updateValues;
@@ -137,8 +139,11 @@
                     this.formAction = this.formActionTemplate.replace('__ID__', this.accountData.id);
                     this.formMethod = 'PUT';
                 } else {
-                    console.log(oldValues);
-                    this.accountData = oldValues;
+                    this.accountData = (this.previousMode != 'edit') ? oldValues : {};
+                    const hasOldBranches = oldValues && Array.isArray(oldValues.branches) && oldValues.branches.length > 0;
+                    if (!(this.previousMode !== 'edit' && hasOldBranches)) {
+                        $("#branches").val([]).trigger("change");
+                    }
                     this.modalTitle = 'Create Account';
                     this.submitLabel = 'Save';
                     this.formAction = '{{ route('accounts.addAccounts') }}';
@@ -148,7 +153,6 @@
 
             openAdd() {
                 this.clearErrors();
-                this.accountData = {};
                 this.setMode('create');
                 this.show = true;
             },
