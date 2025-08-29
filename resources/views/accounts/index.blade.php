@@ -23,7 +23,6 @@
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Account Name</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Type</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Email</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Location</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Account Status</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider"></th>
                     </tr>
@@ -38,7 +37,12 @@
                             </td>
 
                             <td class="px-4 py-3 text-sm font-semibold text-black-700">
-                                {{ $account->name }}
+                                <div class="flex items-center space-x-3">
+                                    <img src="{{ $account->profile_picture ? asset('storage/' . $account->profile_picture) : asset('images/default.jpg') }}"
+                                        class="w-8 h-8 rounded-full object-cover border"
+                                        alt="Profile Picture">
+                                    <span>{{ $account->name }}</span>
+                                </div>
                             </td>
 
                             <td class="px-4 py-3 text-sm text-black-600">
@@ -47,10 +51,6 @@
 
                              <td class="px-4 py-3 text-sm text-black-600">
                                 {{ $account->email }}
-                            </td>
-
-                            <td class="px-4 py-3 text-sm text-black-600">
-                                {{-- {{ $account->email }} --}}
                             </td>
 
                             <td class="px-4 py-3 text-sm font-medium">
@@ -121,6 +121,7 @@
             formActionTemplate: '{{ route('accounts.updateAccounts', ['user' => '__ID__']) }}',
             updateValues,
             errors : {},
+            previewUrl:'',
 
             init() {
                 this.errors = window.sessionFormErrors || {};
@@ -132,6 +133,8 @@
             setMode(mode) {
                 this.previousMode = this.mode; 
                 this.mode = mode;
+                this.previewUrl = (this.updateValues.profile_picture) ? 'storage/'+this.updateValues.profile_picture : 'images/default.jpg';
+                
                 if (mode === 'edit') {
                     this.accountData = this.updateValues;
                     this.modalTitle = 'Update Account';

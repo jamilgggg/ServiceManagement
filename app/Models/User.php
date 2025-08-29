@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'idacctype',
         'idstat',
         'idemailstat',
+        'profile_picture',
         'email_verified_at',
         'remember_token',
     ];

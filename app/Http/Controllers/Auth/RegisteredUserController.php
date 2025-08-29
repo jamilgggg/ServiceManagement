@@ -40,6 +40,7 @@ class RegisteredUserController extends Controller
             'a.idgender',
             'a.idacctype',
             'a.idemailstat',
+            'a.profile_picture',
             'b.type')
             ->from('sp_account as a')
             ->leftJoin('sp_accounttype as b', 'a.idacctype', '=', 'b.id')
@@ -79,6 +80,7 @@ class RegisteredUserController extends Controller
                 'idacctype' => ['required'],
                 'idemailstat' => ['required'],
                 'branches' => ['required'],
+                'profile_picture' => ['nullable','image','mimes:jpg,jpeg,png','max:2048']
             ]);
     
             $user = User::create([
@@ -93,14 +95,20 @@ class RegisteredUserController extends Controller
                 'email_verified_at' => Carbon::now(),
                 'remember_token' => Str::random(10),
             ]);
-    
+
+            if ($request->hasFile('profile_picture')) {
+                $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+                $user->profile_picture = $path;
+                $user->save();
+            }
+
            $user->branches()->attach($request->branches);
     
             return redirect()->back()->with('success', 'Account Added Succesfully');
         }catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Account Creation Error: ' . $e->getMessage());
             return redirect()->back()
-            ->withInput()
+            ->withInput($request->except('profile_picture')) 
             ->with('form_errors', $e->errors())
             ->with('mode', 'create')
             ->with('error', 'Validation failed. Please check the form.');
@@ -121,6 +129,7 @@ class RegisteredUserController extends Controller
                 'idemailstat' => ['required'],
                 'branches' => ['required'],
                 'idstat' => ['required'],
+                'profile_picture' => ['nullable','image','mimes:jpg,jpeg,png','max:2048']
             ]);
     
             $updateData = [
@@ -138,6 +147,14 @@ class RegisteredUserController extends Controller
                 $updateData['password'] = Hash::make($request->password);
             }
 
+            if ($request->hasFile('profile_picture')) {
+                if ($user->profile_picture && \Storage::disk('public')->exists($user->profile_picture)) {
+                    \Storage::disk('public')->delete($user->profile_picture);
+                }
+                $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+                $updateData['profile_picture'] = $path;
+            }
+
             $user->update($updateData);
 
             $user->branches()->sync($request->input('branches', []));
@@ -146,7 +163,7 @@ class RegisteredUserController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Account Update Error: ' . $e->getMessage());
             return redirect()->back()
-            ->withInput()
+            ->withInput($request->except('profile_picture')) 
             ->with('mode', 'edit') 
             ->with('form_errors', $e->errors())
             ->with('updateValues', array_merge($request->all(), ['id' => $user->id]))
