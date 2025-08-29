@@ -43,16 +43,36 @@ class DatabaseSeeder extends Seeder
         $usersBranches = [
             [
                 'id' => 1,
-                'account_id' => 1,
-                'branch_id' => 1,
-            ],
-            [
-                'id' => 2,
                 'account_id' => 2,
                 'branch_id' => 1,
             ],
             [
+                'id' => 2,
+                'account_id' => 1,
+                'branch_id' => 1,
+            ],
+            [
                 'id' => 3,
+                'account_id' => 1,
+                'branch_id' => 2,
+            ],
+            [
+                'id' => 4,
+                'account_id' => 1,
+                'branch_id' => 3,
+            ],
+            [
+                'id' => 5,
+                'account_id' => 1,
+                'branch_id' => 4,
+            ],
+             [
+                'id' => 6,
+                'account_id' => 1,
+                'branch_id' => 5,
+            ],
+            [
+                'id' => 7,
                 'account_id' => 3,
                 'branch_id' => 1,
             ],

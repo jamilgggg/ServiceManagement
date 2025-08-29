@@ -1,20 +1,30 @@
 <div class="grid grid-cols-2 gap-4">
 
-    <!-- Profile Picture -->
-    <div class="col-span-2 flex flex-col items-center">
+   <!-- Profile Picture -->
+    <div class="col-span-2 flex flex-col items-center"
+        x-data="{
+            updatePreview(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+                this.previewUrl = URL.createObjectURL(file);
+            }
+        }">
+
         <label class="block text-sm font-medium text-gray-700">Profile Picture</label>
+
         <div class="relative w-32 h-32 rounded-full overflow-hidden border mt-2">
-            <img x-ref="profilePreview" 
-                 src="{{ $account && $account->profile_picture ? asset('storage/' . $account->profile_picture) : asset('images/default.jpg') }}" 
-                 class="w-full h-full object-cover" alt="Profile Picture">
+            <img :src="previewUrl" class="w-full h-full object-cover" alt="">
             <input type="file" name="profile_picture" class="absolute inset-0 opacity-0 cursor-pointer"
-                @change="
-                    const reader = new FileReader();
-                    reader.onload = (e) => $refs.profilePreview.src = e.target.result;
-                    reader.readAsDataURL($event.target.files[0]);
-                ">
+                @change="updatePreview">
         </div>
+
+        <x-modal-error :field="'profile_picture'" />
     </div>
+
 
     <!-- Employee ID -->
     <div>
@@ -100,15 +110,25 @@
     </div>
 
     <!-- Branch Multi-Select -->
-    <div>
+    <div class="relative">
         <label for="branches" class="block text-sm font-medium text-gray-700">Branch</label>
-        <select x-model="accountData.branches" id="branches" name="branches[]" class="select2 w-full border p-2 rounded-md" :disabled="accountData.idacctype == 1" multiple>
+        <select x-model="accountData.branches"
+                id="branches"
+                name="branches[]"
+                class="select2 w-full border p-2 rounded-md"
+                multiple
+                :disabled="accountData.idacctype == 1">
             @foreach($branches as $branch)
-                <option value="{{ $branch->id }}">
-                    {{ $branch->branch }}
-                </option>
+                <option value="{{ $branch->id }}">{{ $branch->branch }}</option>
             @endforeach
         </select>
+
+        <template x-if="accountData.idacctype == 1">
+            <template x-for="branch in accountData.branches" :key="branch">
+                <input type="hidden" name="branches[]" :value="branch">
+            </template>
+        </template>
+
         <x-modal-error :field="'branches'" />
     </div>
 
