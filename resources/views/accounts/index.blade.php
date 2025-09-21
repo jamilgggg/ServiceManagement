@@ -5,12 +5,25 @@
     x-data='accountModal(
     {{ session("error") ? "true" : "false" }},"{{ session("mode", "") }}",{!! json_encode(old()) !!},
     {!! json_encode(session("updateValues", [])) !!})' class="overflow-x-auto p-1">
-    <button @click="openAdd()" type="button" 
-        class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center ml-auto"
-    >
-        Add Account
-        <i class="fa fa-user-plus ml-1"></i>
-    </button>
+    <div class="flex justify-end space-x-2">
+        <button @click="openAdd()" type="button" 
+            class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center"
+        >
+            <i class="fa fa-user-plus ml-1"></i>
+        </button>
+
+        <div x-data="filterModal()">
+            <button @click="openFilter()" type="button" 
+            class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center"
+            >
+                <i class="fa fa-filter ml-1"></i>
+            </button>
+             <x-filter-modal>
+                @include('accounts.partials.account-filter', ['account' => null])
+             </x-filter-modal>
+        </div>
+
+    </div>
         <x-account-modal>
             @include('accounts.partials.form-fields', ['account' => null])
         </x-account-modal>
@@ -67,8 +80,7 @@
                                         @click='openEdit(@json($account))'
                                         class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 flex items-center"
                                     >
-                                        Update
-                                        <i class="fas fa-edit ml-2 text-xs"></i>
+                                       <i class="fa fa-user-edit ml-1"></i>
                                     </button>
                                 </div>
                             </td>
@@ -106,6 +118,11 @@
             allowClear: true,
             width: '100%'
         });
+        $('#filter_branch').select2({
+            placeholder: "Select Branch",
+            allowClear: true,
+            width: '100%'
+        });
     });
 
     function accountModal(showOnError = false, mode = '', oldValues = {}, updateValues = {})  {
@@ -130,10 +147,14 @@
                 }
             },
 
+            getPreviewUrl(picture) {
+                return picture ? `storage/${picture}` : 'images/default.jpg';
+            },
+
             setMode(mode) {
                 this.previousMode = this.mode; 
                 this.mode = mode;
-                this.previewUrl = (this.updateValues.profile_picture) ? 'storage/'+this.updateValues.profile_picture : 'images/default.jpg';
+                this.previewUrl = this.getPreviewUrl(this.updateValues.profile_picture);
                 
                 if (mode === 'edit') {
                     this.accountData = this.updateValues;
@@ -171,6 +192,21 @@
             clearErrors() {
                 this.errors = {};
             },
+        }
+    }
+
+    function filterModal(){
+        return{
+            filterMode: false,
+            modalTitle: '',
+            filterAction: '',
+
+            openFilter() {
+                this.filterMode = true;
+                this.modalTitle = 'Filter Accounts';
+                this.filterAction = '';
+            },
+
         }
     }
 
